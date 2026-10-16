@@ -1,0 +1,1017 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Matthews vs McDavid</title>
+<meta name="description" content="Auston Matthews vs Connor McDavid: season stats, goals race and the race to 50.">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=Cinzel:wght@600;700;900&family=Rubik+Distressed&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+[hidden]{display:none!important}
+img{max-width:100%}
+
+/* Layout concept: a scoreboard. Quip banner on top, two player cards side by side (stacked on phones), one head-to-head race chart below. Blue = Matthews, orange = McDavid. */
+:root{
+  --bg:#0b121b;
+  --surface:#121b27;
+  --ink:#e8eff7;
+  --muted:#92a3b8;
+  --line:#233245;
+  --grid:#1b2736;
+  --mat:#79a9f2;
+  --mat-soft:#16325a;
+  --mcd:#ff8d52;
+  --mcd-soft:#4a2410;
+  --tie-soft:#1c2837;
+  --warn:#e2b04d;
+  --stink:#8fc12a;
+  --gold:#f2c94c;
+  --gold-hi:#fff1a8;
+  color-scheme:dark;
+  --good:#5ccf97;
+  --good-soft:#123b29;
+  --bad:#ff9482;
+  --bad-soft:#4a1f19;
+  --font-display:'Barlow Condensed','Arial Narrow',system-ui,sans-serif;
+  --font-body:'Barlow',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0b121b;
+    --surface:#121b27;
+    --ink:#e8eff7;
+    --muted:#92a3b8;
+    --line:#233245;
+    --grid:#1b2736;
+    --mat:#79a9f2;
+    --mat-soft:#16325a;
+    --mcd:#ff8d52;
+    --mcd-soft:#4a2410;
+    --tie-soft:#1c2837;
+    --warn:#e2b04d;
+    --good:#5ccf97;
+    --good-soft:#123b29;
+    --bad:#ff9482;
+    --bad-soft:#4a1f19;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0b121b;
+  --surface:#121b27;
+  --ink:#e8eff7;
+  --muted:#92a3b8;
+  --line:#233245;
+  --grid:#1b2736;
+  --mat:#79a9f2;
+  --mat-soft:#16325a;
+  --mcd:#ff8d52;
+  --mcd-soft:#4a2410;
+  --tie-soft:#1c2837;
+  --warn:#e2b04d;
+  --good:#5ccf97;
+  --good-soft:#123b29;
+  --bad:#ff9482;
+  --bad-soft:#4a1f19;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:15px;
+  line-height:1.45;
+  padding-block:24px 40px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+.wrap{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px}
+.eyebrow{margin:0 0 4px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+h1{margin:0;font-family:var(--font-display);font-weight:700;font-size:clamp(34px,7vw,52px);line-height:1;letter-spacing:.01em;text-wrap:balance}
+h1 .vs{color:var(--muted);font-weight:500;font-size:.6em;padding:0 .2em;text-transform:lowercase}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.seg button{font:inherit;font-weight:600;font-size:13px;letter-spacing:.04em;text-transform:uppercase;border:0;background:transparent;color:var(--muted);padding:9px 14px;cursor:pointer;min-height:40px}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+button:focus-visible{outline:2px solid var(--mat);outline-offset:2px}
+
+.banner{border-radius:8px;padding:18px 20px 16px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;background:var(--tie-soft)}
+.banner.is-mat{background:var(--mat-soft)}
+.banner.is-mcd{background:var(--mcd-soft)}
+.tag{margin:0;font-family:var(--font-display);font-weight:700;font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.is-mat .tag{color:var(--mat)}
+.is-mcd .tag{color:var(--mcd)}
+.quip{margin:0;font-family:var(--font-display);font-weight:600;font-size:clamp(24px,4.6vw,36px);line-height:1.12;text-wrap:balance;max-width:34ch}
+.ghost{font:inherit;font-size:13px;font-weight:600;color:var(--ink);background:transparent;border:1px solid currentColor;border-radius:6px;padding:7px 12px;cursor:pointer;min-height:36px}
+
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:34px}
+@media (max-width:720px){.grid{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.card h2{margin:0;font-family:var(--font-display);font-weight:700;font-size:30px;line-height:1.05}
+.mat h2{color:var(--mat)}
+.mcd h2{color:var(--mcd)}
+.sub{margin:3px 0 0;color:var(--muted);font-size:13px}
+.chip{font-family:var(--font-display);font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;padding:4px 9px;border-radius:5px;white-space:nowrap}
+.mat .chip{background:var(--mat);color:var(--bg)}
+.mcd .chip{background:var(--mcd);color:var(--bg)}
+
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0}
+.stat{border:1px solid var(--line);border-radius:7px;padding:9px 10px 8px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.stat dt{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.stat dd{margin:0;font-family:var(--font-display);font-weight:600;font-size:30px;line-height:1.05;font-variant-numeric:tabular-nums}
+.stat.on{background:var(--tie-soft);border-color:transparent}
+.mat .stat.on{background:var(--mat-soft)}
+.mcd .stat.on{background:var(--mcd-soft)}
+
+.block-title{margin:0 0 4px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+svg{display:block;width:100%;height:auto;max-width:100%}
+.gridline{stroke:var(--grid);stroke-width:1}
+.axis{fill:var(--muted);font-family:var(--font-body);font-size:11px;font-variant-numeric:tabular-nums}
+.l-mat{stroke:var(--mat);fill:none;stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+.l-mcd{stroke:var(--mcd);fill:none;stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+.a-mat{fill:var(--mat);fill-opacity:.14;stroke:none}
+.a-mcd{fill:var(--mcd);fill-opacity:.14;stroke:none}
+.d-mat{fill:var(--mat)}
+.d-mcd{fill:var(--mcd)}
+.t-mat{fill:var(--mat);font-family:var(--font-display);font-weight:700;font-size:15px}
+.t-mcd{fill:var(--mcd);font-family:var(--font-display);font-weight:700;font-size:15px}
+
+.scroll{overflow-x:auto}
+table.log{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+.log th{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:right;padding:4px 8px;border-bottom:1px solid var(--line)}
+.log td{text-align:right;padding:6px 8px;border-bottom:1px solid var(--grid)}
+.log th:first-child,.log td:first-child,.log th:nth-child(2),.log td:nth-child(2){text-align:left}
+
+.race{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.race h2{margin:0;font-family:var(--font-display);font-weight:700;font-size:24px}
+.foot{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+.foot p{margin:0}
+.stale{color:var(--warn);font-weight:600}
+.empty{padding:28px;border:1px dashed var(--line);border-radius:10px;color:var(--muted);text-align:center}
+@media (prefers-reduced-motion:no-preference){
+  .quip{animation:rise .35s ease-out}
+  @keyframes rise{from{opacity:.2;transform:translateY(4px)}to{opacity:1;transform:none}}
+}
+.card{position:relative}
+
+/* Leader auras: both effects wrap the whole card, on all four sides */
+.glow{
+  border-color:color-mix(in srgb,var(--gold) 70%,var(--surface));
+  box-shadow:0 0 22px 4px color-mix(in srgb,var(--gold) 48%,transparent),0 0 64px 18px color-mix(in srgb,var(--gold) 28%,transparent),0 0 120px 34px color-mix(in srgb,var(--gold) 14%,transparent),inset 0 0 34px color-mix(in srgb,var(--gold) 18%,transparent);
+}
+.glow::before{
+  content:"";position:absolute;inset:-30px;border-radius:36px;z-index:-1;pointer-events:none;
+  background:radial-gradient(55% 55% at 20% 10%,color-mix(in srgb,var(--gold) 40%,transparent),transparent 70%),radial-gradient(55% 55% at 85% 90%,color-mix(in srgb,#ffe27a 36%,transparent),transparent 70%),radial-gradient(40% 40% at 90% 15%,color-mix(in srgb,var(--gold) 26%,transparent),transparent 70%),radial-gradient(40% 40% at 10% 90%,color-mix(in srgb,#fff1a8 24%,transparent),transparent 70%);
+  filter:blur(24px);
+}
+.stench{
+  border-color:color-mix(in srgb,var(--stink) 80%,var(--line));
+  box-shadow:0 0 22px 4px color-mix(in srgb,var(--stink) 42%,transparent),0 0 64px 16px color-mix(in srgb,var(--stink) 24%,transparent),inset 0 0 40px color-mix(in srgb,var(--stink) 24%,transparent);
+}
+.stench::before{
+  content:"";position:absolute;inset:-26px;border-radius:34px;z-index:-1;pointer-events:none;
+  background:radial-gradient(55% 55% at 15% 85%,color-mix(in srgb,var(--stink) 36%,transparent),transparent 70%),radial-gradient(55% 55% at 85% 15%,color-mix(in srgb,#b6c93a 30%,transparent),transparent 70%),radial-gradient(45% 45% at 50% 100%,color-mix(in srgb,var(--stink) 28%,transparent),transparent 70%);
+  filter:blur(22px);
+}
+.aura{position:absolute;inset:0;pointer-events:none;z-index:2}
+.puff{
+  --k:1;position:absolute;left:var(--x);top:var(--y);
+  width:calc(var(--w) * var(--k));height:calc(var(--w) * var(--k));
+  margin:calc(var(--w) * var(--k) / -2) 0 0 calc(var(--w) * var(--k) / -2);
+  border-radius:50%;opacity:.6;
+}
+.glow .puff{background:radial-gradient(closest-side,#fff,color-mix(in srgb,var(--gold) 65%,transparent) 50%,transparent);filter:blur(1px)}
+.stench .puff{--k:2.6;background:radial-gradient(closest-side,color-mix(in srgb,var(--stink) 92%,transparent),transparent);filter:blur(6px)}
+@media (prefers-reduced-motion:no-preference){
+  .glow{animation:halo 3.2s ease-in-out infinite}
+  .glow::before{animation:drift 6s ease-in-out infinite alternate}
+  .stench{animation:stink 2.4s ease-in-out infinite}
+  .stench::before{animation:drift 5s ease-in-out infinite alternate}
+  .stench h2{animation:queasy 2.2s ease-in-out infinite}
+  .glow .puff{animation:twinkle 3s ease-out var(--d) infinite}
+  .stench .puff{animation:waft 3.6s ease-in-out var(--d) infinite}
+  @keyframes halo{
+    0%,100%{box-shadow:0 0 22px 4px color-mix(in srgb,var(--gold) 48%,transparent),0 0 64px 18px color-mix(in srgb,var(--gold) 28%,transparent),0 0 120px 34px color-mix(in srgb,var(--gold) 14%,transparent),inset 0 0 34px color-mix(in srgb,var(--gold) 18%,transparent)}
+    50%{box-shadow:0 0 34px 8px color-mix(in srgb,var(--gold) 68%,transparent),0 0 90px 28px color-mix(in srgb,var(--gold) 40%,transparent),0 0 150px 48px color-mix(in srgb,var(--gold) 22%,transparent),inset 0 0 50px color-mix(in srgb,var(--gold) 28%,transparent)}
+  }
+  @keyframes stink{
+    0%,100%{box-shadow:0 0 22px 4px color-mix(in srgb,var(--stink) 42%,transparent),0 0 64px 16px color-mix(in srgb,var(--stink) 24%,transparent),inset 0 0 40px color-mix(in srgb,var(--stink) 24%,transparent)}
+    50%{box-shadow:0 0 32px 8px color-mix(in srgb,var(--stink) 60%,transparent),0 0 88px 26px color-mix(in srgb,var(--stink) 36%,transparent),inset 0 0 56px color-mix(in srgb,var(--stink) 34%,transparent)}
+  }
+  @keyframes drift{from{transform:translate(-8px,-5px) scale(1)}to{transform:translate(8px,5px) scale(1.05)}}
+  @keyframes twinkle{
+    0%{transform:translate(0,0) scale(.3);opacity:0}
+    25%{opacity:1}
+    100%{transform:translate(calc(var(--dx) * 54px),calc(var(--dy) * 54px)) scale(1.1);opacity:0}
+  }
+  @keyframes waft{
+    0%{transform:translate(0,0) scale(.5);opacity:0}
+    20%{opacity:.9}
+    60%{transform:translate(calc(var(--dx) * 36px + 6px),calc(var(--dy) * 36px - 12px)) scale(1)}
+    100%{transform:translate(calc(var(--dx) * 74px - 6px),calc(var(--dy) * 74px - 28px)) scale(1.7);opacity:0}
+  }
+  @keyframes queasy{0%,100%{transform:translateX(0)}25%{transform:translateX(-1.5px) rotate(-.4deg)}75%{transform:translateX(1.5px) rotate(.4deg)}}
+}
+
+/* Matthews leads: champion treatment (gold trim, hanging banner, podium lift) */
+.glow{
+  border:2px solid transparent;
+  background:linear-gradient(var(--surface),var(--surface)) padding-box,linear-gradient(135deg,#f6e27a,#c9a227 30%,#fff1a8 50%,#b8901f 72%,#f0d060) border-box;
+  top:-8px;margin-inline:-6px;
+}
+.glow h2{position:relative;display:inline-block;vertical-align:top;overflow:hidden}
+.glow h2::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 35%,rgba(255,236,150,.85) 50%,transparent 65%);transform:translateX(-120%)}
+.pennant{
+  position:absolute;top:-2px;right:22px;width:58px;height:88px;padding-top:10px;z-index:3;
+  display:flex;flex-direction:column;align-items:center;gap:2px;transform-origin:50% 0;
+  background:linear-gradient(180deg,#f6e27a,#d9b53a 55%,#b8901f);color:#14223d;
+  clip-path:polygon(0 0,100% 0,100% 84%,50% 100%,0 84%);pointer-events:none;
+}
+.pennant .n{font-family:var(--font-display);font-weight:700;font-size:30px;line-height:1}
+.pennant .t{font-family:var(--font-display);font-weight:700;font-size:10px;letter-spacing:.14em;text-transform:uppercase;text-align:center;line-height:1.15}
+.trail{margin-inline:6px;filter:saturate(.65) brightness(.92);opacity:.9}
+#confetti{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:60}
+
+/* McDavid leads: decrepit treatment (aged, cracked, cobwebbed, crooked, flickering, taped off) */
+.stench{transform:rotate(-1.2deg);transform-origin:14% 0}
+.stench > :not(.aura):not(.decay):not(.hat){filter:sepia(.55) saturate(.75) brightness(.96)}
+.decay{position:absolute;inset:0;pointer-events:none;z-index:3;border-radius:10px}
+.web{position:absolute;width:96px;height:96px;stroke:var(--ink);fill:none;stroke-width:.8;opacity:.4}
+.web-tl{left:0;top:0}
+.web-br{right:0;bottom:0;transform:rotate(180deg)}
+.crack{position:absolute;right:0;top:0;width:150px;height:auto;fill:none;stroke-linejoin:round;stroke-linecap:round}
+.crack .c1{stroke:var(--ink);stroke-width:1.5;opacity:.5}
+.crack .c2{stroke:var(--surface);stroke-width:1.2;opacity:.85;transform:translate(1.4px,1.4px)}
+.blackout{position:absolute;inset:0;border-radius:10px;background:var(--bg);opacity:0}
+.tape{
+  position:absolute;left:-12px;right:-12px;top:-12px;height:24px;overflow:hidden;transform:rotate(-1.6deg);
+  display:flex;justify-content:space-around;align-items:center;
+  background:repeating-linear-gradient(-45deg,#f2c500 0 9px,#1a1a1a 9px 18px);box-shadow:0 2px 6px rgba(0,0,0,.35);
+}
+.tape span{background:#f2c500;color:#141414;font-family:var(--font-display);font-weight:700;font-size:14px;letter-spacing:.2em;text-transform:uppercase;padding:0 12px;line-height:24px;white-space:nowrap}
+@media (max-width:520px){.tape span:nth-child(3){display:none}}
+@media (prefers-reduced-motion:no-preference){
+  .glow h2::after{animation:sheen 4.2s ease-in-out infinite}
+  .pennant{animation:flap 3.4s ease-in-out infinite}
+  .stench{animation:stink 2.4s ease-in-out infinite,sway 6s ease-in-out infinite}
+  .blackout{animation:flicker 7s linear infinite}
+  .banner.is-mcd .tag,.banner.is-mcd .quip{animation:txtflick 6s linear infinite}
+  @keyframes sheen{0%,55%{transform:translateX(-120%)}85%,100%{transform:translateX(120%)}}
+  @keyframes flap{0%,100%{transform:rotate(-1.6deg)}50%{transform:rotate(1.6deg)}}
+  @keyframes sway{0%,100%{transform:rotate(-1.4deg)}50%{transform:rotate(-.5deg)}}
+  @keyframes flicker{
+    0%,60%,65%,89%,92%,100%{opacity:0}
+    61%{opacity:.5}62%{opacity:0}63%{opacity:.6}64%{opacity:.1}
+    90%{opacity:.4}91%{opacity:0}
+  }
+  @keyframes txtflick{0%,70%,74%,100%{opacity:1}71%{opacity:.35}72%{opacity:1}73%{opacity:.5}}
+}
+
+
+/* ===== Royal treatment (Matthews leads): gold letters, serif caps, a crown ===== */
+.glow{padding-top:32px}
+.glow h2{
+  font-family:'Cinzel',Georgia,'Times New Roman',serif;font-weight:900;font-size:26px;letter-spacing:.03em;line-height:1.15;
+  background:linear-gradient(180deg,#fff3b0 0%,#f2c94c 45%,#b8861b 100%);-webkit-background-clip:text;background-clip:text;
+  color:transparent;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 10px rgba(242,201,76,.45));
+}
+.glow .sub{color:#d9c27a;letter-spacing:.04em}
+.glow .stat dd{color:var(--gold);text-shadow:0 0 12px rgba(242,201,76,.35)}
+.glow .stat dt{color:#d9c27a}
+.glow .stat{border-color:color-mix(in srgb,var(--gold) 38%,var(--line))}
+.glow .block-title{color:#d9c27a}
+.glow .l-mat{stroke:var(--gold)}
+.glow .a-mat{fill:var(--gold);fill-opacity:.16}
+.glow .d-mat{fill:var(--gold)}
+.glow .t-mat{fill:var(--gold)}
+.crown{position:absolute;left:20px;top:-38px;width:74px;z-index:4;transform:rotate(-7deg);transform-origin:50% 100%;pointer-events:none;filter:drop-shadow(0 0 10px rgba(242,201,76,.75))}
+.crown svg{display:block;width:100%;height:auto;overflow:visible}
+.crown .glint{fill:#fff;opacity:0}
+
+/* ===== Court-jester treatment (McDavid leads): jester hat, cracked and broken lettering ===== */
+.stench{padding-top:36px}
+.stench h2{
+  font-family:'Rubik Distressed','Special Elite',Impact,'Arial Black',sans-serif;font-weight:400;font-size:26px;letter-spacing:.03em;line-height:1.1;
+  transform:skewX(-5deg) rotate(.6deg);transform-origin:0 100%;
+  text-shadow:2px 0 rgba(168,50,31,.55),-2px 1px rgba(60,160,120,.35),0 0 1px rgba(0,0,0,.6);
+}
+.stench h2,.stench .sub{opacity:.92}
+.hat{position:absolute;left:12px;top:-52px;width:98px;z-index:5;transform:rotate(-13deg);transform-origin:50% 100%;pointer-events:none;filter:drop-shadow(0 3px 3px rgba(0,0,0,.5))}
+.hat svg{display:block;width:100%;height:auto;overflow:visible}
+#cards{margin-top:clamp(26px,3vh,40px)}
+@media (prefers-reduced-motion:no-preference){
+  .crown{animation:bob 3.6s ease-in-out infinite}
+  .crown .glint{animation:glint 3.4s ease-in-out infinite}
+  .crown .glint.g2{animation-delay:1.1s}
+  .crown .glint.g3{animation-delay:2.2s}
+  .hat{animation:jingle 2.6s ease-in-out infinite}
+  .stench h2{animation:queasy 2.2s ease-in-out infinite,shatter 5.5s steps(1,end) infinite}
+  @keyframes bob{0%,100%{transform:rotate(-7deg) translateY(0)}50%{transform:rotate(-5deg) translateY(-3px)}}
+  @keyframes glint{0%,70%,100%{opacity:0;transform:scale(.3)}80%{opacity:1;transform:scale(1.15)}90%{opacity:0;transform:scale(.4)}}
+  @keyframes jingle{0%,100%{transform:rotate(-13deg)}25%{transform:rotate(-8deg)}50%{transform:rotate(-15deg)}75%{transform:rotate(-9deg)}}
+  @keyframes shatter{0%,88%,100%{clip-path:none;text-shadow:2px 0 rgba(168,50,31,.55),-2px 1px rgba(60,160,120,.35)}89%{clip-path:inset(0 0 55% 0);text-shadow:-5px 0 rgba(168,50,31,.7),4px 0 rgba(60,160,120,.5)}90%{clip-path:inset(45% 0 0 0);text-shadow:5px 0 rgba(168,50,31,.7),-4px 0 rgba(60,160,120,.5)}91%{clip-path:none}}
+}
+
+/* Race to 50: Matthews' goals, the principal bet */
+.track{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.track-top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:6px 16px}
+.track h2{margin:0;font-family:var(--font-display);font-weight:700;font-size:30px;line-height:1.05;color:var(--mat)}
+.track .sub{margin:3px 0 0}
+.track .big{font-family:var(--font-display);font-weight:700;font-size:46px;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums}
+.track .big small{font-size:24px;color:var(--muted);font-weight:600}
+.meter-wrap{padding-top:22px}
+.meter{position:relative;height:18px;border-radius:9px;background:var(--grid)}
+.meter-fill{position:absolute;left:0;top:0;bottom:0;border-radius:9px;background:linear-gradient(90deg,var(--mat),color-mix(in srgb,var(--mat) 65%,#9fd0ff))}
+.pace{position:absolute;top:-5px;bottom:-5px;width:2px;background:var(--ink);transform:translateX(-1px)}
+.pace-label{position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);white-space:nowrap;font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;color:var(--muted)}
+.pace.early .pace-label{left:0;transform:none}
+.pace.late .pace-label{left:auto;right:0;transform:none}
+.scale{position:relative;height:18px;margin-top:6px}
+.scale span{position:absolute;top:0;transform:translateX(-50%);font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.scale span:first-child{transform:none}
+.scale span:last-child{transform:translateX(-100%)}
+.verdict{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
+.pill{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-display);font-weight:700;font-size:18px;letter-spacing:.12em;text-transform:uppercase;padding:5px 14px 5px 11px;border-radius:6px;white-space:nowrap}
+.pill::before{content:"";width:10px;height:10px;border-radius:50%;background:currentColor}
+.pill.good{background:var(--good-soft);color:var(--good)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.done{background:var(--ink);color:var(--bg)}
+.verdict p{margin:0;flex:1 1 280px;min-width:0}
+.t-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:8px;margin:0}
+.track .note{margin:0;font-size:12px;color:var(--muted)}
+
+/* Keep the wide auras from creating sideways scroll on phones */
+body{overflow-x:hidden;overflow-x:clip}
+
+/* PREVIEW-TOGGLE (temporary): delete this CSS, the .preview markup and the PREVIEW-TOGGLE JS to retire it */
+.preview{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.preview .lbl{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.pv{display:inline-flex;flex-wrap:wrap;border:1px dashed var(--muted);border-radius:8px;overflow:hidden;background:var(--surface)}
+.pv button{font:inherit;font-weight:600;font-size:13px;letter-spacing:.04em;text-transform:uppercase;border:0;background:transparent;color:var(--muted);padding:9px 14px;cursor:pointer;min-height:40px}
+.pv button+button{border-left:1px dashed var(--muted)}
+.pv button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+
+/* ===== Monitor view: fits one screen, no scrolling. Switched on with the "Monitor view" button (or #monitor in the address). ===== */
+.ctrls{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.mon{font:inherit;font-weight:600;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:0 14px;min-height:40px;cursor:pointer}
+.mon[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.mon:focus-visible{outline:2px solid var(--mat);outline-offset:2px}
+.stamp{display:none}
+@media (min-width:700px) and (min-aspect-ratio:1/1){
+  html.tv,html.tv body{height:100%}
+  html.tv body{overflow:hidden;padding-top:max(1.6vh,10px);padding-bottom:max(3.6vh,26px)}
+  html.tv .wrap{max-width:none;height:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5vh 1.5vw}
+  html.tv .top{align-items:center;flex-wrap:nowrap;justify-content:space-between;gap:1vw}
+  html.tv .top > div:first-child{min-width:0;max-width:58vw}
+  html.tv .ctrls{position:fixed;right:max(1.5vw,16px);bottom:.9vh;z-index:5}
+  html.tv .top h1{white-space:nowrap;font-size:clamp(28px,6vh,72px)}
+  html.tv .eyebrow{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:clamp(10px,1.5vh,16px);margin-bottom:.4vh}
+  html.tv .seg{display:none}
+  html.tv .mon{min-height:clamp(28px,3.8vh,40px);font-size:clamp(10px,1.5vh,13px);padding:0 1vw;opacity:.6}
+  html.tv .preview{justify-self:end;align-self:center}
+  html.tv .preview .lbl{font-size:clamp(9px,1.3vh,12px)}
+  html.tv .pv button{min-height:clamp(28px,3.8vh,40px);padding:0 1vw;font-size:clamp(10px,1.4vh,13px)}
+  html.tv .banner{justify-content:center;padding:1.8vh 1.6vw;gap:1vh}
+  html.tv .banner .ghost{display:none}
+  html.tv .tag{font-size:clamp(12px,1.9vh,22px)}
+  html.tv .quip{font-size:clamp(20px,4vh,54px);max-width:none}
+  html.tv .track{padding:1.5vh 1.4vw;gap:1.1vh}
+  html.tv .track h2{font-size:clamp(22px,4vh,48px)}
+  html.tv .track .sub,html.tv .track .note{display:none}
+  html.tv .track .big{font-size:clamp(30px,5.6vh,72px)}
+  html.tv .track .big small{font-size:.5em}
+  html.tv .meter-wrap{padding-top:2.2vh}
+  html.tv .meter{height:clamp(12px,2.2vh,28px)}
+  html.tv .pill{font-size:clamp(14px,2.2vh,26px)}
+  html.tv .verdict p{font-size:clamp(12px,1.8vh,20px);flex-basis:180px}
+  html.tv .t-stats{grid-template-columns:repeat(5,minmax(0,1fr))}
+  html.tv .track .stat{padding:.6vh .7vw}
+  html.tv .track .stat dt{font-size:clamp(8px,1.2vh,13px);letter-spacing:.06em}
+  html.tv .track .stat dd{font-size:clamp(18px,3.4vh,44px)}
+  html.tv #cards{gap:1.5vw;min-height:0;margin-top:2.2vh}
+  html.tv .card{padding:1.5vh 1.4vw;gap:1.2vh;min-height:0}
+  html.tv .card.stench{padding-top:calc(1.5vh + 22px)}
+  html.tv .card.glow{padding-top:calc(1.5vh + 16px)}
+  html.tv .card.glow h2,html.tv .card.stench h2{font-size:clamp(20px,min(3.9vh,2.6vw),50px)}
+  html.tv .crown{width:clamp(64px,10.5vh,116px);top:calc(-1 * clamp(32px,5.8vh,62px))}
+  html.tv .hat{width:clamp(66px,11vh,118px);top:calc(-1 * clamp(34px,6.6vh,66px))}
+  html.tv #cards{margin-top:clamp(24px,4.2vh,48px)}
+  html.tv .card h2{font-size:clamp(24px,4.6vh,60px)}
+  html.tv .card .sub{font-size:clamp(11px,1.6vh,18px)}
+  html.tv .chip{font-size:clamp(11px,1.6vh,18px)}
+  html.tv .stats{grid-template-columns:repeat(6,minmax(0,1fr))}
+  html.tv .stat{padding:.7vh .55vw}
+  html.tv .stat dt{font-size:clamp(9px,1.3vh,14px)}
+  html.tv .stat dd{font-size:clamp(18px,min(4.4vh,2vw),56px)}
+  html.tv .block-title{font-size:clamp(9px,1.3vh,14px);margin-bottom:.4vh}
+  html.tv .card > div:nth-last-child(2){flex:1 1 0;min-height:0;display:flex;flex-direction:column}
+  html.tv .card > div:nth-last-child(2) svg{flex:1 1 0;min-height:0;width:100%;height:100%}
+  html.tv .card > div:last-child{display:none}
+  html.tv .race,html.tv .foot{display:none}
+  html.tv .stamp{display:block;position:fixed;left:max(1.5vw,16px);bottom:.9vh;margin:0;font-size:clamp(11px,1.5vh,18px);color:var(--muted)}
+  html.tv .stamp.stale{color:var(--warn);font-weight:700}
+}
+/* All monitor shapes: quip banner and Race to 50 tracker each run full width, stacked, with the two player cards below */
+@media (min-width:700px) and (min-aspect-ratio:1/1){
+  html.tv .wrap{grid-template-rows:auto auto auto minmax(0,1fr)}
+  html.tv .top{grid-column:1/-1;grid-row:1}
+  html.tv .preview{grid-column:2;grid-row:1;z-index:2}
+  html.tv .banner{grid-column:1/-1;grid-row:2;padding:1.4vh 1.6vw}
+  html.tv .quip{font-size:clamp(18px,3.4vh,44px)}
+  html.tv .track{grid-column:1/-1;grid-row:3;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);column-gap:1.8vw;row-gap:1vh;align-items:center}
+  html.tv .track-top{grid-column:1;grid-row:1}
+  html.tv .meter-wrap{grid-column:1;grid-row:2}
+  html.tv .verdict{grid-column:2;grid-row:1}
+  html.tv .t-stats{grid-column:2;grid-row:2}
+  html.tv #cards{grid-column:1/-1;grid-row:4}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <p class="eyebrow">2026-27 regular season &middot; friendly wager &middot; most goals wins</p>
+      <h1>Matthews <span class="vs">vs</span> McDavid</h1>
+    </div>
+    <div class="ctrls">
+    <div class="seg" role="group" aria-label="Which stat decides the wager">
+      <button type="button" data-metric="goals" aria-pressed="true">Goals</button>
+      <button type="button" data-metric="points" aria-pressed="false">Points</button>
+      <button type="button" data-metric="assists" aria-pressed="false">Assists</button>
+    </div>
+    <button type="button" class="mon" id="tvbtn" aria-pressed="false">Monitor view</button>
+    </div>
+  </header>
+
+  <!-- PREVIEW-TOGGLE:START (temporary) -->
+  <div class="preview">
+    <span class="lbl">Preview</span>
+    <div class="pv" role="group" aria-label="Preview who is leading">
+      <button type="button" data-preview="live" aria-pressed="true">Live</button>
+      <button type="button" data-preview="mat" aria-pressed="false">Matthews leads</button>
+      <button type="button" data-preview="mcd" aria-pressed="false">McDavid leads</button>
+    </div>
+  </div>
+  <!-- PREVIEW-TOGGLE:END -->
+
+  <section class="track" id="track" aria-label="Race to 50 goals"></section>
+
+  <section id="banner" class="banner" aria-live="polite">
+    <p class="tag" id="tag"></p>
+    <p class="quip" id="quip"></p>
+    <button type="button" class="ghost" id="again">Another one</button>
+  </section>
+
+  <main id="cards" class="grid"></main>
+
+  <section class="race" id="race"></section>
+
+  <footer class="foot" id="foot"></footer>
+  <p class="stamp" id="stamp"></p>
+</div>
+
+<div id="confetti" aria-hidden="true"></div>
+
+<script id="nhl-data" type="application/json">
+{"season":"20262027","updatedAt":"2026-10-16T18:55:00Z","players":[
+{"id":"matthews","name":"Auston Matthews","team":"Toronto Maple Leafs","abbr":"TOR","num":34,"pos":"C","games":[
+{"d":"2026-09-29","o":"MTL","g":0,"a":0,"p":0,"t":1354},
+{"d":"2026-09-30","o":"NYI","g":0,"a":0,"p":0,"t":1204},
+{"d":"2026-10-03","o":"OTT","g":1,"a":0,"p":1,"t":1310},
+{"d":"2026-10-06","o":"NSH","g":1,"a":3,"p":4,"t":1509},
+{"d":"2026-10-08","o":"VGK","g":0,"a":1,"p":1,"t":1292},
+{"d":"2026-10-10","o":"COL","g":2,"a":2,"p":4,"t":1326},
+{"d":"2026-10-13","o":"UTA","g":1,"a":1,"p":2,"t":1212},
+{"d":"2026-10-15","o":"BUF","g":1,"a":0,"p":1,"t":1334}]},
+{"id":"mcdavid","name":"Connor McDavid","team":"Edmonton Oilers","abbr":"EDM","num":97,"pos":"C","games":[
+{"d":"2026-09-29","o":"VAN","g":0,"a":2,"p":2,"t":1371},
+{"d":"2026-10-01","o":"VAN","g":1,"a":4,"p":5,"t":1323},
+{"d":"2026-10-03","o":"SEA","g":1,"a":1,"p":2,"t":1577},
+{"d":"2026-10-07","o":"ANA","g":1,"a":2,"p":3,"t":1471},
+{"d":"2026-10-10","o":"SJS","g":0,"a":1,"p":1,"t":1444},
+{"d":"2026-10-13","o":"LAK","g":1,"a":3,"p":4,"t":1297},
+{"d":"2026-10-15","o":"UTA","g":0,"a":1,"p":1,"t":1552}]}
+]}
+</script>
+
+<script>
+(function(){
+  var $ = function(s){ return document.querySelector(s); };
+  var esc = function(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); };
+  var KEY = { points:'p', goals:'g', assists:'a' };
+  var tvOn = false;
+  try { tvOn = localStorage.getItem('monitor-view') === '1'; } catch (e) {}
+  if (location.hash === '#monitor') tvOn = true;
+  function tvKind(){
+    if (!tvOn || window.innerWidth < 700) return '';
+    var r = window.innerWidth / Math.max(window.innerHeight, 1);
+    return r >= 1.5 ? 'wide' : (r >= 1 ? '43' : '');
+  }
+  function applyTv(){
+    document.documentElement.classList.toggle('tv', tvOn);
+    var b = $('#tvbtn');
+    if (b) b.setAttribute('aria-pressed', tvOn ? 'true' : 'false');
+  }
+  var SINGULAR = { points:'point', goals:'goal', assists:'assist' };
+
+  var MAT_LEADS = [
+    "Auston is on top. Somewhere in Edmonton, a stat sheet just looked away.",
+    "Matthews leads. Please remain calm and begin drafting your congratulations.",
+    "The lead belongs to Auston. Connor is welcome to a participation sticker.",
+    "Matthews is ahead. Receipts have been printed, framed and hung in the hallway.",
+    "Leaf Nation rejoices. The rest of Ontario is pretending to be casual about it.",
+    "Auston up. Your move, Connor. Preferably a small one.",
+    "Matthews leads. Connor's agent has been notified and is already writing a statement.",
+    "Auston is ahead. The scoreboard checked twice, just to be polite.",
+    "Goals are Auston's love language, and he is fluent.",
+    "Matthews is up. Connor's fans are suddenly very interested in assists.",
+    "The lead is Auston's. McDavid may enjoy it on loan, with interest.",
+    "Auston scores, Connor sets up. A fine division of labor, honestly.",
+    "Matthews leads the goals race. McDavid leads the 'but he has more points' race. Enjoy it.",
+    "That's a lead. You can tell because it's not yours, Connor.",
+    "Matthews is cooking. McDavid is still reading the recipe.",
+    "Auston is out front. The mailman has been asked to deliver Connor's excuses early.",
+    "Somewhere, a goal horn just turned into a victory lap.",
+    "Matthews leads. Please direct all complaints to the nearest assist.",
+    "Auston is winning. Connor is 'passing the puck' as a lifestyle choice.",
+    "The race for goals has a leader, and he's wearing 34.",
+    "Matthews is ahead, and the gap is cheerfully gloating in the corner.",
+    "Connor can skate fast. Auston can finish. One of those is on the wager.",
+    "A moment of silence for Connor's goal total. It's being very brave.",
+    "Matthews leads. Connor's trophy case has requested a smaller shelf.",
+    "Auston is ahead. The group chat has been told to behave. It will not.",
+    "Goal totals don't lie. They just quietly rub it in.",
+    "Matthews takes the lead and refuses to give a speech, because he's busy shooting.",
+    "Auston is up, which makes everything Connor says from here on 'a hot take'.",
+    "Matthews: ahead. McDavid: 'it's a long season'. Classic.",
+    "Every goal Auston scores is another page in the I-told-you-so book.",
+    "Auston leads. Edmonton's tough-love committee has called an emergency meeting.",
+    "The goals leader is Matthews. Connor is currently googling 'how to shoot more'.",
+    "Matthews is ahead and the puck has never looked happier.",
+    "That's what a goal lead looks like, Connor. Take a screenshot.",
+    "Auston on top. Connor's assist count is doing its best to look relevant.",
+    "Matthews leads. The only thing McDavid is leading is the 'almost' column.",
+    "Auston is winning, and he did it without getting fancy about it.",
+    "Connor can have the speed. Auston will take the lead.",
+    "Matthews is ahead. Time to start practicing your graceful loser face, Connor.",
+    "The lead has changed hands, and by 'changed hands' we mean it's staying put.",
+    "Auston scores goals the way other people check their phone: constantly.",
+    "Matthews leads. Connor is advised to hydrate and lower expectations.",
+    "Not to say 'told you so', but the scoreboard just said it for us.",
+    "Auston is up. Connor's excuses are still in the printer.",
+    "Matthews takes the goals lead. McDavid takes it personally.",
+    "The race isn't over, but Auston is very comfortable in front of the camera.",
+    "Matthews leads. Somewhere a pizza bet is looking nervous, and it's not Auston's.",
+    "Auston ahead. Connor's side of the wager has entered a reflective period.",
+    "The lead is Matthews'. The gloating is optional, but encouraged.",
+    "Matthews is winning. Please keep your hands and excuses inside the vehicle.",
+    "Auston scores. Connor assists. Everyone knows who's on the wager.",
+    "Matthews leads, and the goal light is practically a night light now.",
+    "Connor is fast. Auston is ahead. Only one of those pays out.",
+    "Matthews is on top and the view is, frankly, excellent.",
+    "Auston has the lead, and he's making it look like a Tuesday.",
+    "Matthews leads. Connor, we hear the bus to Edmonton has Wi-Fi if you'd like to cry in peace."
+  ];
+  var MCD_EXCUSES = [
+    "Auston's lucky stick is in witness protection. Nobody can confirm where.",
+    "The puck gets shy in front of Matthews. It is a well-documented condition.",
+    "Matthews is saving his goals for the playoffs. Very strategic. Very patient. Very behind.",
+    "Connor drafted behind a passing Zamboni. That is a technicality, not a stat.",
+    "Somebody put a pebble in Auston's skate. There are no suspects. There are barely any rules.",
+    "The ice in Edmonton is 4% faster. I made that number up, but prove me wrong.",
+    "Auston is playing the long game. A very, very long game.",
+    "McDavid is clearly wearing speed socks. A formal complaint has been drafted.",
+    "Auston's shot is on a scheduled maintenance window. Nobody told the puck.",
+    "The net got narrower for Matthews. The league denies this, but the league would.",
+    "Auston is simply load-managing his goals. For the season. In October.",
+    "Connor is ahead because the goal posts moved. Check the paperwork.",
+    "Matthews hit a post. Technically, that's a moral goal. Please add it to the totals.",
+    "Somebody swapped Auston's stick with a baguette. Investigation ongoing, bread is cooperating.",
+    "The goalies are doing it on purpose. It's personal and it's probably a conspiracy.",
+    "Auston is saving up goals for one huge, dramatic, cinematic comeback. Any day now.",
+    "Matthews is playing on 'hard mode'. Connor is on 'tutorial'.",
+    "Connor's stick has a rumored tailwind. Auston's has a rumored headwind. Again: rumors.",
+    "The puck simply prefers Edmonton. It's a lifestyle choice, don't take it personally.",
+    "Auston's goals are in the mail. Canada Post is aware and hopeful.",
+    "Matthews had a bad pregame snack. The kind of thing nobody puts on the stat sheet.",
+    "The arena's gravity is slightly off in Toronto. Scientists are baffled and uninterested.",
+    "Auston is being polite to the goalies. It's his best and worst quality.",
+    "Connor's lead is a clerical error. Please allow 6 to 8 weeks for correction.",
+    "Matthews is going through a 'quiet quitting' phase with his shot.",
+    "The scoreboard operator is a known McDavid fan. We're looking into it.",
+    "Auston's lucky socks were shrunk in the wash. The shrinkage was emotional.",
+    "Auston is letting Connor win early so the comeback hits harder. Totally planned.",
+    "Somebody left the lid off Auston's 'puck confidence'. It evaporated.",
+    "The ice is just so cold on Auston's side. That's not a metaphor. It's ice.",
+    "Matthews is playing chess. Everybody else is playing hockey. That's why he's behind.",
+    "Connor has the lead, but Auston has the vibes. Vibes are not on the wager.",
+    "Auston's lead is simply 'in transit'. Delays expected due to weather, referees and Connor.",
+    "The goal horn in Toronto is slightly out of tune. It's affecting morale.",
+    "Matthews is saving his best shots for the group photo. Patience.",
+    "Connor got the lead the old-fashioned way: by shooting more. Cheap trick.",
+    "Somebody typed the wrong stats in. Auston is owed several goals and an apology.",
+    "Auston's shot is currently in 'airplane mode'. It'll reconnect eventually.",
+    "The puck has a minor allergy to Matthews' stick. It's under review.",
+    "Matthews has just been very busy. It's been a stressful week for his goals.",
+    "Connor is ahead, because the universe loves a cheap plot twist.",
+    "Auston is working on a 'surprise me' strategy. The surprise is on him.",
+    "The team trainer says Matthews needs 'more rest' for his goals. He's resting them.",
+    "Auston scores best on days that end in a specific letter. We're waiting on the letter.",
+    "Matthews is on a goal fast. It's a cleanse. It'll be great for him.",
+    "The net looked smaller on the replay. Experts are split, experts are also confused.",
+    "Connor isn't leading, he's just 'borrowing' it. With full intent to lose it back.",
+    "Matthews is practicing patience. He's got a lot of it. It's costing him.",
+    "A cursed sticker is on Auston's stick. We checked. The sticker says 'Hello, my name is Goal Drought'.",
+    "Connor must be using a secret, illegal, extremely fast kind of 'trying'.",
+    "The goals will return. They're just on vacation. A long one. In a warm place.",
+    "Auston keeps hitting the goalie's 'glove side'. Everyone's glove side, apparently.",
+    "Matthews is behind, because a very specific raccoon stole his luck. The raccoon knows what it did.",
+    "Connor leads only because Matthews gave him a head start, as a good sportsman does.",
+    "Auston's time on ice includes a lot of 'finding himself'. It's going fine.",
+    "It's all part of the master plan. The master plan is currently 'wait'.",
+    "Matthews trails, but the trailing is stylish. Please grade accordingly.",
+    "Connor is ahead. We recommend a calm, reasonable, deeply unreasonable response."
+  ];
+  var AURA_POINTS = [
+    ['10%','0%',0,-1,'0s','16px'],['35%','0%',0,-1,'1.2s','12px'],['62%','0%',0,-1,'.6s','18px'],['88%','0%',0,-1,'1.9s','13px'],
+    ['18%','100%',0,1,'.9s','14px'],['44%','100%',0,1,'2.1s','18px'],['70%','100%',0,1,'.3s','12px'],['93%','100%',0,1,'1.5s','16px'],
+    ['0%','14%',-1,0,'1.4s','13px'],['0%','40%',-1,0,'.2s','18px'],['0%','66%',-1,0,'1.8s','12px'],['0%','88%',-1,0,'.8s','16px'],
+    ['100%','24%',1,0,'.5s','16px'],['100%','50%',1,0,'1.7s','13px'],['100%','75%',1,0,'1s','18px'],['100%','95%',1,0,'2.3s','12px']
+  ];
+  function aura(){
+    return '<div class="aura" aria-hidden="true">' + AURA_POINTS.map(function(q){
+      return '<span class="puff" style="--x:' + q[0] + ';--y:' + q[1] + ';--dx:' + q[2] + ';--dy:' + q[3] + ';--d:' + q[4] + ';--w:' + q[5] + '"></span>';
+    }).join('') + '</div>';
+  }
+  var lastState = null, curState = 'tie';
+  var autoReloaded = false;
+  try { autoReloaded = sessionStorage.getItem('autoreload') === '1'; sessionStorage.removeItem('autoreload'); } catch (e) {}
+  var PENNANT = '<div class="pennant" aria-hidden="true"><span class="n">34</span><span class="t">Goals<br>leader</span></div>';
+  function webSvg(cls){
+    var radials = [0, 22.5, 45, 67.5, 90], radii = [22, 42, 64, 90], d = '';
+    radials.forEach(function(a){ var r = a * Math.PI / 180; d += 'M0 0L' + (90 * Math.cos(r)).toFixed(1) + ' ' + (90 * Math.sin(r)).toFixed(1); });
+    radii.forEach(function(R){
+      for (var i = 0; i < radials.length - 1; i++){
+        var a1 = radials[i] * Math.PI / 180, a2 = radials[i + 1] * Math.PI / 180, am = (a1 + a2) / 2;
+        d += 'M' + (R * Math.cos(a1)).toFixed(1) + ' ' + (R * Math.sin(a1)).toFixed(1) +
+          'Q' + (R * .86 * Math.cos(am)).toFixed(1) + ' ' + (R * .86 * Math.sin(am)).toFixed(1) + ' ' +
+          (R * Math.cos(a2)).toFixed(1) + ' ' + (R * Math.sin(a2)).toFixed(1);
+      }
+    });
+    return '<svg class="web ' + cls + '" viewBox="0 0 90 90"><path d="' + d + '"/></svg>';
+  }
+  var CRACK_D = 'M160 0L141 22L148 40L126 63L131 78L109 104L114 118M141 22L120 20L104 34M126 63L106 58L92 70M131 78L150 92L146 108M109 104L92 100L80 112';
+  var DECAY = '<div class="decay" aria-hidden="true">' + webSvg('web-tl') + webSvg('web-br') +
+    '<svg class="crack" viewBox="0 0 160 140"><path class="c2" d="' + CRACK_D + '"/><path class="c1" d="' + CRACK_D + '"/></svg>' +
+    '<div class="blackout"></div>' +
+    '<div class="tape"><span>Out of order</span><span>Out of order</span><span>Out of order</span></div>' + '</div>';
+
+  var CROWN = '<div class="crown" aria-hidden="true"><svg viewBox="0 0 80 58"><defs><linearGradient id="crg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3b0"/><stop offset=".5" stop-color="#f2c94c"/><stop offset="1" stop-color="#b8861b"/></linearGradient></defs>' +
+    '<path d="M6 50V18l17 15L40 6l17 27 17-15v32z" fill="url(#crg)" stroke="#8a6410" stroke-width="1.6" stroke-linejoin="round"/>' +
+    '<rect x="6" y="42" width="68" height="9" rx="2" fill="#d9a92a" stroke="#8a6410" stroke-width="1.4"/>' +
+    '<circle cx="6" cy="16" r="4.2" fill="#fff1a8" stroke="#8a6410" stroke-width="1.2"/><circle cx="40" cy="4.5" r="4.6" fill="#fff1a8" stroke="#8a6410" stroke-width="1.2"/><circle cx="74" cy="16" r="4.2" fill="#fff1a8" stroke="#8a6410" stroke-width="1.2"/>' +
+    '<circle cx="40" cy="46.5" r="3.6" fill="#d8283a" stroke="#6e0f1b" stroke-width="1"/><circle cx="22" cy="46.5" r="3" fill="#2a63d6" stroke="#10306e" stroke-width="1"/><circle cx="58" cy="46.5" r="3" fill="#2a63d6" stroke="#10306e" stroke-width="1"/>' +
+    '<path class="glint" d="M20 24l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/><path class="glint g2" d="M56 12l1.6 4 4 1.6-4 1.6-1.6 4-1.6-4-4-1.6 4-1.6z"/><path class="glint g3" d="M40 26l1.8 4.4 4.4 1.8-4.4 1.8L40 38l-1.8-4-4.4-1.8 4.4-1.8z"/>' +
+    '</svg></div>';
+  var HAT = '<div class="hat" aria-hidden="true"><svg viewBox="0 0 100 78"><defs><linearGradient id="hpg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8d4bb8"/><stop offset="1" stop-color="#4f2073"/></linearGradient></defs>' +
+    '<path d="M16 64C8 52 3 42 5 26c10 10 26 20 36 38z" fill="url(#hpg)" stroke="#2b1040" stroke-width="1.6" stroke-linejoin="round"/>' +
+    '<path d="M36 64C35 40 42 20 52 7c8 15 14 36 12 57z" fill="#d6471d" stroke="#5c1a08" stroke-width="1.6" stroke-linejoin="round"/>' +
+    '<path d="M60 64C70 46 84 34 97 28c2 14-4 28-14 36z" fill="url(#hpg)" stroke="#2b1040" stroke-width="1.6" stroke-linejoin="round"/>' +
+    '<path d="M44 58l5-14M55 56l-3-18" stroke="#5c1a08" stroke-width="1.2" stroke-dasharray="3 3" fill="none"/>' +
+    '<rect x="12" y="60" width="78" height="15" rx="4" fill="#e0a800" stroke="#5e4400" stroke-width="1.6"/>' +
+    '<path d="M22 67.5l5-5 5 5-5 5zM40 67.5l5-5 5 5-5 5zM58 67.5l5-5 5 5-5 5zM76 67.5l5-5 5 5-5 5z" fill="#3a7a2a" stroke="#1f4416" stroke-width="1"/>' +
+    '<circle cx="5" cy="26" r="5.4" fill="#f4d04a" stroke="#5e4400" stroke-width="1.4"/><circle cx="52" cy="7" r="5.4" fill="#f4d04a" stroke="#5e4400" stroke-width="1.4"/><circle cx="97" cy="28" r="5.4" fill="#f4d04a" stroke="#5e4400" stroke-width="1.4"/>' +
+    '<path d="M3 24.5a3 3 0 0 1 3-1.6M50 5.5a3 3 0 0 1 3-1.6M95 26.5a3 3 0 0 1 3-1.6" stroke="#fff" stroke-width="1.2" fill="none" stroke-linecap="round"/>' +
+    '</svg></div>';
+
+  function burst(){
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var host = document.getElementById('confetti');
+    var card = document.querySelector('.card.glow');
+    if (!host || !card || !host.animate) return;
+    var r = card.getBoundingClientRect();
+    var ox = Math.min(Math.max(r.left + r.width / 2, 40), window.innerWidth - 40);
+    var oy = Math.min(Math.max(r.top + 12, 60), window.innerHeight - 80);
+    var colors = ['#f6e27a', '#d9b53a', '#ffd84d', '#fff1a8', '#ffffff', '#e8b923'];
+    for (var i = 0; i < 70; i++){
+      var el = document.createElement('i');
+      var w = 6 + Math.random() * 6, hgt = 8 + Math.random() * 10;
+      el.style.cssText = 'position:absolute;left:' + ox + 'px;top:' + oy + 'px;width:' + w + 'px;height:' + hgt + 'px;background:' + colors[i % colors.length] + ';border-radius:' + (i % 4 === 0 ? '50%' : '1px');
+      host.appendChild(el);
+      var dx = (Math.random() - .5) * Math.min(window.innerWidth * .9, 700);
+      var up = 140 + Math.random() * 260;
+      var fall = window.innerHeight - oy + 60 + Math.random() * 80;
+      var rot = (Math.random() - .5) * 900;
+      var anim = el.animate([
+        { transform:'translate(0,0) rotate(0deg)', opacity:1, easing:'ease-out' },
+        { transform:'translate(' + (dx * .55) + 'px,' + (-up) + 'px) rotate(' + (rot * .4) + 'deg)', opacity:1, offset:.32, easing:'ease-in' },
+        { transform:'translate(' + dx + 'px,' + fall + 'px) rotate(' + rot + 'deg)', opacity:.9 }
+      ], { duration: 2400 + Math.random() * 1600, delay: Math.random() * 200, fill:'forwards' });
+      anim.onfinish = (function(n){ return function(){ n.remove(); }; })(el);
+    }
+  }
+  var GOAL = 50, SEASON_GAMES = 82;
+  function renderTrack(s){
+    var el = $('#track');
+    if (!el) return;
+    var left = Math.max(SEASON_GAMES - s.gp, 0);
+    var avg = s.gp ? s.g / s.gp : 0;
+    var proj = s.g + avg * left;
+    var need = left ? Math.max(GOAL - s.g, 0) / left : 0;
+    var done = s.g >= GOAL;
+    var on = proj >= GOAL;
+    var kind = done ? 'done' : (on ? 'good' : 'bad');
+    var label = done ? 'Reached 50' : (on ? 'On track' : 'Off pace');
+    var pct = Math.min(s.g / GOAL, 1) * 100;
+    var pacePct = Math.min(s.gp / SEASON_GAMES, 1) * 100;
+    var paceGoals = GOAL * s.gp / SEASON_GAMES;
+    var paceCls = pacePct < 18 ? ' early' : (pacePct > 82 ? ' late' : '');
+    var text;
+    if (done){
+      text = 'Matthews has reached 50 goals. The bet is won.';
+    } else if (!s.gp){
+      text = 'No games played yet, so there is no pace to measure.';
+    } else if (on){
+      text = 'At ' + avg.toFixed(2) + ' goals a game, Matthews is on pace for about ' + Math.floor(proj) + ' goals over the remaining ' + left + ' games. He only needs ' + need.toFixed(2) + ' a game to reach 50.';
+    } else {
+      text = 'At ' + avg.toFixed(2) + ' goals a game, Matthews is on pace for about ' + Math.floor(proj) + ' goals. He needs ' + need.toFixed(2) + ' a game over the remaining ' + left + ' games to reach 50.';
+    }
+    var ticks = [0, 10, 20, 30, 40, 50].map(function(v){ return '<span style="left:' + (v / GOAL * 100) + '%">' + v + '</span>'; }).join('');
+    el.innerHTML =
+      '<div class="track-top"><div><h2>Race to 50</h2><p class="sub">Auston Matthews, regular-season goals</p></div>' +
+      '<div class="big">' + s.g + ' <small>/ ' + GOAL + '</small></div></div>' +
+      '<div class="meter-wrap"><div class="meter" role="img" aria-label="' + s.g + ' of ' + GOAL + ' goals">' +
+        '<div class="meter-fill" style="width:' + pct.toFixed(2) + '%"></div>' +
+        '<div class="pace' + paceCls + '" style="left:' + pacePct.toFixed(2) + '%"><span class="pace-label">Pace line ' + paceGoals.toFixed(1) + '</span></div>' +
+      '</div><div class="scale" aria-hidden="true">' + ticks + '</div></div>' +
+      '<div class="verdict" aria-live="polite"><span class="pill ' + kind + '">' + label + '</span><p>' + text + '</p></div>' +
+      '<dl class="t-stats">' +
+        '<div class="stat"><dt>Goals</dt><dd>' + s.g + '</dd></div>' +
+        '<div class="stat"><dt>Games left</dt><dd>' + left + '</dd></div>' +
+        '<div class="stat"><dt>Goals / game</dt><dd>' + avg.toFixed(2) + '</dd></div>' +
+        '<div class="stat"><dt>Needs / game</dt><dd>' + need.toFixed(2) + '</dd></div>' +
+        '<div class="stat"><dt>Season pace</dt><dd>' + Math.floor(proj) + '</dd></div>' +
+      '</dl>' +
+      '<p class="note">Based on his goals per game so far, an 82-game season, and him playing every remaining game. The pace line is where he needs to be right now to finish on 50.</p>';
+  }
+  var TIES = [
+    "Dead even. Both players are, for once, equally unbothered.",
+    "A tie. Somebody check whether the scoreboard is just being polite.",
+    "All square. The Hockey Gods are refusing to pick a side."
+  ];
+
+  var raw = $('#nhl-data');
+  var DATA = null;
+  try { DATA = JSON.parse(raw.textContent); } catch (e) { DATA = null; }
+
+  var metric = 'goals';
+  try { var saved = localStorage.getItem('wager-metric-v2'); if (saved && KEY[saved]) metric = saved; } catch (e) {}
+  var quipShift = 0;
+  var preview = 'live'; // PREVIEW-TOGGLE (temporary): 'live', 'mat' or 'mcd'
+
+  function fmtTime(sec){ var m = Math.floor(sec / 60), s = Math.round(sec % 60); if (s === 60){ m++; s = 0; } return m + ':' + (s < 10 ? '0' : '') + s; }
+  function fmtDate(d){ return new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month:'short', day:'numeric' }); }
+  function hash(str){ var h = 0; for (var i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) | 0; return Math.abs(h); }
+
+  function summarize(p){
+    var s = { gp:p.games.length, g:0, a:0, p:0, t:0 };
+    p.games.forEach(function(x){ s.g += x.g; s.a += x.a; s.p += x.p; s.t += x.t; });
+    s.toi = s.gp ? s.t / s.gp : 0;
+    s.ppg = s.gp ? s.p / s.gp : 0;
+    s.gpg = s.gp ? s.g / s.gp : 0;
+    return s;
+  }
+  function cumulative(p, k){
+    var out = [0], run = 0;
+    p.games.forEach(function(x){ run += x[k]; out.push(run); });
+    return out;
+  }
+  function niceMax(v){
+    var step = v <= 10 ? 2 : (v <= 30 ? 5 : 10);
+    return Math.max(step, Math.ceil(v / step) * step);
+  }
+  function stepFor(top){ return top <= 10 ? 2 : (top <= 30 ? 5 : 10); }
+
+  function spark(vals, top, maxN, cls){
+    var W = 300, H = 92, px = 10, pt = 20, pb = 8;
+    var kind = tvKind();
+    if (kind === 'wide'){ W = 720; H = 150; } else if (kind === '43'){ W = 480; H = 190; }
+    var X = function(i){ return px + (W - 2 * px) * i / Math.max(maxN, 1); };
+    var Y = function(v){ return pt + (H - pt - pb) * (1 - v / top); };
+    var pts = vals.map(function(v, i){ return [X(i), Y(v)]; });
+    var line = pts.map(function(q, i){ return (i ? 'L' : 'M') + q[0].toFixed(1) + ' ' + q[1].toFixed(1); }).join(' ');
+    var last = pts[pts.length - 1];
+    var area = line + ' L' + last[0].toFixed(1) + ' ' + Y(0).toFixed(1) + ' L' + pts[0][0].toFixed(1) + ' ' + Y(0).toFixed(1) + ' Z';
+    var grid = [0, top / 2, top].map(function(v){ return '<line class="gridline" x1="' + px + '" x2="' + (W - px) + '" y1="' + Y(v).toFixed(1) + '" y2="' + Y(v).toFixed(1) + '"/>'; }).join('');
+    var ly = Math.max(13, last[1] - 9);
+    var lx = Math.min(last[0], W - 14);
+    return '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Cumulative ' + metric + ' by game, now ' + vals[vals.length - 1] + '">' +
+      grid +
+      '<path class="a-' + cls + '" d="' + area + '"/>' +
+      '<path class="l-' + cls + '" d="' + line + '"/>' +
+      '<circle class="d-' + cls + '" cx="' + last[0].toFixed(1) + '" cy="' + last[1].toFixed(1) + '" r="4.5"/>' +
+      '<text class="t-' + cls + '" x="' + lx.toFixed(1) + '" y="' + ly.toFixed(1) + '" text-anchor="end">' + vals[vals.length - 1] + '</text>' +
+      '</svg>';
+  }
+
+  function raceChart(mat, mcd, k, top, maxN){
+    var W = 640, H = 260, ml = 34, mr = 104, mt = 16, mb = 30;
+    var X = function(i){ return ml + (W - ml - mr) * i / Math.max(maxN, 1); };
+    var Y = function(v){ return mt + (H - mt - mb) * (1 - v / top); };
+    var out = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Cumulative ' + metric + ' by game for both players">';
+    var st = stepFor(top);
+    for (var v = 0; v <= top; v += st){
+      out += '<line class="gridline" x1="' + ml + '" x2="' + (W - mr) + '" y1="' + Y(v).toFixed(1) + '" y2="' + Y(v).toFixed(1) + '"/>';
+      out += '<text class="axis" x="' + (ml - 8) + '" y="' + (Y(v) + 4).toFixed(1) + '" text-anchor="end">' + v + '</text>';
+    }
+    var xs = maxN > 24 ? 5 : (maxN > 12 ? 2 : 1);
+    for (var g = 0; g <= maxN; g += xs){
+      out += '<text class="axis" x="' + X(g).toFixed(1) + '" y="' + (H - 10) + '" text-anchor="middle">' + g + '</text>';
+    }
+    var ends = [];
+    [[mat, 'mat', 'Matthews'], [mcd, 'mcd', 'McDavid']].forEach(function(item){
+      var vals = item[0], cls = item[1];
+      var line = vals.map(function(val, i){ return (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(val).toFixed(1); }).join(' ');
+      out += '<path class="l-' + cls + '" d="' + line + '"/>';
+      var li = vals.length - 1;
+      out += '<circle class="d-' + cls + '" cx="' + X(li).toFixed(1) + '" cy="' + Y(vals[li]).toFixed(1) + '" r="4.5"/>';
+      ends.push({ cls:cls, name:item[2], x:X(li), y:Y(vals[li]), v:vals[li] });
+    });
+    if (Math.abs(ends[0].y - ends[1].y) < 16){
+      var hi = ends[0].y <= ends[1].y ? ends[0] : ends[1];
+      var lo = hi === ends[0] ? ends[1] : ends[0];
+      var mid = (hi.y + lo.y) / 2;
+      hi.ly = mid - 8; lo.ly = mid + 8;
+    }
+    ends.forEach(function(e){
+      var ly = (e.ly !== undefined ? e.ly : e.y) + 5;
+      out += '<text class="t-' + e.cls + '" x="' + (e.x + 10).toFixed(1) + '" y="' + ly.toFixed(1) + '">' + e.name + ' ' + e.v + '</text>';
+    });
+    out += '<text class="axis" x="' + ((ml + W - mr) / 2) + '" y="' + (H - 0) + '" text-anchor="middle" dy="-0">games played</text>';
+    out += '</svg>';
+    return out;
+  }
+
+  function card(p, s, cls, isLead, topY, maxN){
+    var k = KEY[metric];
+    var tiles = [
+      ['goals','G', s.g],
+      ['assists','A', s.a],
+      ['points','P', s.p],
+      ['gp','GP', s.gp],
+      ['toi','TOI / GP', fmtTime(s.toi)],
+      ['gpg','G / GP', s.gpg.toFixed(2)]
+    ].map(function(t){
+      return '<div class="stat' + (t[0] === metric ? ' on' : '') + '"><dt>' + t[1] + '</dt><dd>' + t[2] + '</dd></div>';
+    }).join('');
+    var rows = p.games.slice(-5).reverse().map(function(x){
+      return '<tr><td>' + fmtDate(x.d) + '</td><td>' + esc(x.o) + '</td><td>' + x.g + '</td><td>' + x.a + '</td><td>' + x.p + '</td><td>' + fmtTime(x.t) + '</td></tr>';
+    }).join('');
+    return '<article class="card ' + cls + (isLead ? (cls === 'mat' ? ' glow' : ' stench') : (cls === 'mcd' && curState === 'mat' ? ' trail' : '')) + '">' + (isLead ? aura() + (cls === 'mat' ? PENNANT + CROWN : DECAY + HAT) : '') +
+      '<div class="card-head"><div><h2>' + esc(p.name) + '</h2><p class="sub">' + esc(p.team) + ' &middot; #' + esc(p.num) + ' &middot; ' + esc(p.pos) + '</p></div>' +
+      (isLead && cls === 'mcd' ? '<span class="chip">Leads. For now.</span>' : '') + '</div>' +
+      '<dl class="stats">' + tiles + '</dl>' +
+      '<div><p class="block-title">Season ' + metric + ', game by game</p>' + spark(cumulative(p, k), topY, maxN, cls) + '</div>' +
+      '<div><p class="block-title">Last five games</p><div class="scroll"><table class="log"><thead><tr><th>Date</th><th>Opp</th><th>G</th><th>A</th><th>P</th><th>TOI</th></tr></thead><tbody>' + rows + '</tbody></table></div></div>' +
+      '</article>';
+  }
+
+  function render(){
+    if (!DATA || !DATA.players || DATA.players.length < 2){
+      $('#banner').hidden = true;
+      $('#race').hidden = true;
+      $('#cards').innerHTML = '<div class="empty">No stats yet. The next scheduled refresh will fill this in.</div>';
+      return;
+    }
+    var mat = DATA.players.filter(function(p){ return p.id === 'matthews'; })[0];
+    var mcd = DATA.players.filter(function(p){ return p.id === 'mcdavid'; })[0];
+    var sm = summarize(mat), sc = summarize(mcd);
+    renderTrack(sm);
+    var k = KEY[metric];
+    var diff = sm.g - sc.g;
+    var state = diff > 0 ? 'mat' : (diff < 0 ? 'mcd' : 'tie');
+    var realState = state;
+    if (preview !== 'live') state = preview; // PREVIEW-TOGGLE (temporary)
+    var margin = Math.abs(diff);
+    var unit = margin === 1 ? 'goal' : 'goals';
+
+    var banner = $('#banner');
+    banner.className = 'banner is-' + state;
+    var list = state === 'mat' ? MAT_LEADS : (state === 'mcd' ? MCD_EXCUSES : TIES);
+    var seed = hash((DATA.updatedAt || '').slice(0, 10) + 'goals' + state);
+    $('#quip').textContent = list[(seed + quipShift) % list.length];
+    $('#tag').textContent = state !== realState ? 'Preview: ' + (state === 'mat' ? 'Matthews leads' : (state === 'mcd' ? 'McDavid leads' : 'All square')) : state === 'mat' ? 'Matthews leads by ' + margin + ' ' + unit :
+      (state === 'mcd' ? 'McDavid leads by ' + margin + ' ' + unit : 'All square at ' + sm.g + ' goals');
+    var again = $('#again');
+    again.textContent = state === 'mcd' ? 'Another excuse' : 'Another quip';
+
+    var matSeries = cumulative(mat, k), mcdSeries = cumulative(mcd, k);
+    var maxN = Math.max(mat.games.length, mcd.games.length);
+    var top = niceMax(Math.max(sm[k], sc[k]));
+    curState = state;
+    $('#cards').innerHTML = card(mat, sm, 'mat', state === 'mat', top, maxN) + card(mcd, sc, 'mcd', state === 'mcd', top, maxN);
+    if (state === 'mat' && lastState !== 'mat' && !(lastState === null && autoReloaded)) requestAnimationFrame(burst);
+    lastState = state;
+    $('#race').innerHTML = '<h2>The race: ' + metric + ' by games played</h2><p class="sub">Each line climbs one step per game, so a player with fewer games stops earlier.</p>' + raceChart(matSeries, mcdSeries, k, top, maxN);
+
+    var lastDate = '';
+    DATA.players.forEach(function(p){ p.games.forEach(function(x){ if (x.d > lastDate) lastDate = x.d; }); });
+    var upd = DATA.updatedAt ? new Date(DATA.updatedAt) : null;
+    var stale = upd && (Date.now() - upd.getTime()) > 40 * 3600 * 1000;
+    $('#foot').innerHTML =
+      '<p>The wager is decided by goals, so the banner always tracks goals. ' + (metric === 'goals' ? '' : 'The ' + metric + ' view is for trash talk only. ') + 'Use the buttons at the top to change what the cards and charts show.</p>' +
+      '<p>Counts every regular-season game through ' + (lastDate ? fmtDate(lastDate) : 'the latest game') + '. ' +
+      (upd ? 'Last refreshed ' + upd.toLocaleString('en-US', { month:'short', day:'numeric', hour:'numeric', minute:'2-digit' }) + '.' : '') + '</p>' +
+      '<p>Numbers come from the NHL stats feed and refresh automatically after games, so they can trail the final horn by several hours.</p>' +
+      (stale ? '<p class="stale">Heads up: the last refresh was more than a day and a half ago, so these numbers may be behind.</p>' : '');
+    var stampEl = $('#stamp');
+    if (stampEl){
+      stampEl.className = 'stamp' + (stale ? ' stale' : '');
+      stampEl.textContent = upd ? (stale ? 'Data may be out of date. Last updated ' : 'Updated ') + upd.toLocaleString('en-US', { month:'short', day:'numeric', hour:'numeric', minute:'2-digit' }) : '';
+    }
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('.seg button'), function(btn){
+    btn.addEventListener('click', function(){
+      metric = btn.getAttribute('data-metric');
+      quipShift = 0;
+      try { localStorage.setItem('wager-metric-v2', metric); } catch (e) {}
+      Array.prototype.forEach.call(document.querySelectorAll('.seg button'), function(b){
+        b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+      });
+      render();
+    });
+  });
+  $('#again').addEventListener('click', function(){ quipShift++; render(); });
+  // PREVIEW-TOGGLE (temporary): remove this block together with the .preview markup and CSS
+  Array.prototype.forEach.call(document.querySelectorAll('.pv button'), function(btn){
+    btn.addEventListener('click', function(){
+      preview = btn.getAttribute('data-preview');
+      quipShift = 0;
+      Array.prototype.forEach.call(document.querySelectorAll('.pv button'), function(b){
+        b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+      });
+      render();
+    });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('.seg button'), function(b){
+    b.setAttribute('aria-pressed', b.getAttribute('data-metric') === metric ? 'true' : 'false');
+  });
+  applyTv();
+  $('#tvbtn').addEventListener('click', function(){
+    tvOn = !tvOn;
+    try { localStorage.setItem('monitor-view', tvOn ? '1' : '0'); } catch (e) {}
+    applyTv();
+    render();
+  });
+  var resizeTimer = null;
+  window.addEventListener('resize', function(){
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function(){ if (tvOn) render(); }, 200);
+  });
+  render();
+  // Hosted version: pull fresh numbers from data.json (updated by the scheduled GitHub job),
+  // keep the screen awake where the browser allows it, and reload the page every few hours to pick up site changes.
+  var lastRaw = '';
+  function load(){
+    if (!window.fetch) return;
+    fetch('data.json?_=' + Date.now(), { cache:'no-store' })
+      .then(function(r){ return r.ok ? r.text() : null; })
+      .then(function(txt){
+        if (!txt || txt === lastRaw) return;
+        var j = JSON.parse(txt);
+        if (!j || !j.players || j.players.length < 2) return;
+        lastRaw = txt;
+        DATA = j;
+        render();
+      })
+      .catch(function(){});
+  }
+  load();
+  setInterval(load, 10 * 60 * 1000);
+  setInterval(function(){
+    try { sessionStorage.setItem('autoreload', '1'); } catch (e) {}
+    location.reload();
+  }, 6 * 3600 * 1000);
+  function keepAwake(){
+    try {
+      if (navigator.wakeLock && document.visibilityState === 'visible') {
+        navigator.wakeLock.request('screen').catch(function(){});
+      }
+    } catch (e) {}
+  }
+  keepAwake();
+  document.addEventListener('visibilitychange', keepAwake);
+})();
+</script>
+</body>
+</html>
