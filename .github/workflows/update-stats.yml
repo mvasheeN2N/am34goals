@@ -1,0 +1,132 @@
+name: Update NHL stats
+
+on:
+  schedule:
+    # GitHub schedules are in UTC. These four times cover 3 AM and 3 PM Eastern in both summer and winter
+    # time. The "Is it 3 AM or 3 PM Eastern?" step below skips the two that do not match.
+    # The :17 avoids GitHub's busiest moment (the top of the hour), so the update lands around 3:17.
+    - cron: "17 7,8,19,20 * * *"
+  workflow_dispatch:   # adds a "Run workflow" button so you can update by hand
+
+permissions:
+  contents: write      # lets the job save the new numbers back into this repository
+
+concurrency:
+  group: update-stats
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the repository files
+        uses: actions/checkout@v4
+
+      - name: Is it 3 AM or 3 PM Eastern?
+        id: gate
+        run: |
+          HOUR=$(TZ=America/New_York date +%-H)
+          echo "It is hour $HOUR in Eastern time (event: $GITHUB_EVENT_NAME)"
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ] || [ "$HOUR" = "3" ] || [ "$HOUR" = "15" ]; then
+            echo "go=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "go=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Get the latest numbers from the NHL
+        if: steps.gate.outputs.go == 'true'
+        run: |
+          python3 - <<'PY'
+          """Fetch this season's game logs for both players from the NHL and write data.json."""
+          import json
+          import os
+          import sys
+          import time
+          import urllib.request
+          from datetime import datetime, timezone
+
+          PLAYERS = [
+              {"id": "matthews", "nhl_id": 8479318, "name": "Auston Matthews", "team": "Toronto Maple Leafs", "abbr": "TOR", "num": 34, "pos": "C"},
+              {"id": "mcdavid", "nhl_id": 8478402, "name": "Connor McDavid", "team": "Edmonton Oilers", "abbr": "EDM", "num": 97, "pos": "C"},
+          ]
+          BASE = "https://api-web.nhle.com/v1/player/"
+          OUT = "data.json"
+
+
+          def get_json(url, tries=3):
+              last = None
+              for attempt in range(tries):
+                  try:
+                      req = urllib.request.Request(url, headers={"User-Agent": "matthews-vs-mcdavid-tracker", "Accept": "application/json"})
+                      with urllib.request.urlopen(req, timeout=20) as resp:
+                          return json.load(resp)
+                  except Exception as err:  # try again a couple of times before giving up
+                      last = err
+                      time.sleep(3 * (attempt + 1))
+              raise RuntimeError("Could not fetch " + url + ": " + str(last))
+
+
+          def to_seconds(toi):
+              # "22:14" -> 1334
+              try:
+                  parts = [int(x) for x in str(toi or "0:00").split(":")]
+              except ValueError:
+                  return 0
+              if len(parts) == 3:
+                  return parts[0] * 3600 + parts[1] * 60 + parts[2]
+              return parts[0] * 60 + (parts[1] if len(parts) > 1 else 0)
+
+
+          def load_player(p):
+              log = get_json(BASE + str(p["nhl_id"]) + "/game-log/now")
+              # "now" can point at the playoffs once they start. The wager is regular season only (gameTypeId 2).
+              if log.get("gameTypeId") != 2 and log.get("seasonId"):
+                  log = get_json(BASE + str(p["nhl_id"]) + "/game-log/" + str(log["seasonId"]) + "/2")
+              games = []
+              for g in log.get("gameLog", []):
+                  games.append({
+                      "d": g.get("gameDate"),
+                      "o": g.get("opponentAbbrev"),
+                      "g": int(g.get("goals") or 0),
+                      "a": int(g.get("assists") or 0),
+                      "p": int(g.get("points") or 0),
+                      "t": to_seconds(g.get("toi")),
+                  })
+              games.sort(key=lambda x: x["d"] or "")
+              if not games:
+                  raise RuntimeError("No games returned for " + p["name"])
+              player = {k: p[k] for k in ("id", "name", "team", "abbr", "num", "pos")}
+              player["games"] = games
+              return str(log.get("seasonId", "")), player
+
+
+          def main():
+              loaded = [load_player(p) for p in PLAYERS]
+              data = {
+                  "season": loaded[0][0],
+                  "updatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                  "players": [pl for _, pl in loaded],
+              }
+              tmp = OUT + ".tmp"
+              with open(tmp, "w") as f:
+                  json.dump(data, f, indent=1)
+              os.replace(tmp, OUT)  # only replaced when everything above worked, so old numbers survive a failure
+              print("Saved " + OUT + ": " + ", ".join(pl["name"] + " " + str(len(pl["games"])) + " games" for pl in data["players"]))
+
+
+          if __name__ == "__main__":
+              try:
+                  main()
+              except Exception as err:
+                  print("ERROR: " + str(err), file=sys.stderr)
+                  sys.exit(1)
+          PY
+
+      - name: Save the new numbers
+        if: steps.gate.outputs.go == 'true'
+        run: |
+          git config user.name "stats-bot"
+          git config user.email "stats-bot@users.noreply.github.com"
+          git add data.json
+          git commit -m "Update stats $(date -u +%Y-%m-%dT%H:%MZ)" || echo "Nothing new to save"
+          git push
