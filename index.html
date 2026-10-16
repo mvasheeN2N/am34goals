@@ -96,10 +96,6 @@ body{
 .eyebrow{margin:0 0 4px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
 h1{margin:0;font-family:var(--font-display);font-weight:700;font-size:clamp(34px,7vw,52px);line-height:1;letter-spacing:.01em;text-wrap:balance}
 h1 .vs{color:var(--muted);font-weight:500;font-size:.6em;padding:0 .2em;text-transform:lowercase}
-.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
-.seg button{font:inherit;font-weight:600;font-size:13px;letter-spacing:.04em;text-transform:uppercase;border:0;background:transparent;color:var(--muted);padding:9px 14px;cursor:pointer;min-height:40px}
-.seg button+button{border-left:1px solid var(--line)}
-.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
 button:focus-visible{outline:2px solid var(--mat);outline-offset:2px}
 
 .banner{border-radius:8px;padding:18px 20px 16px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;background:var(--tie-soft)}
@@ -351,13 +347,6 @@ table.log{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeri
 /* Keep the wide auras from creating sideways scroll on phones */
 body{overflow-x:hidden;overflow-x:clip}
 
-/* PREVIEW-TOGGLE (temporary): delete this CSS, the .preview markup and the PREVIEW-TOGGLE JS to retire it */
-.preview{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
-.preview .lbl{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
-.pv{display:inline-flex;flex-wrap:wrap;border:1px dashed var(--muted);border-radius:8px;overflow:hidden;background:var(--surface)}
-.pv button{font:inherit;font-weight:600;font-size:13px;letter-spacing:.04em;text-transform:uppercase;border:0;background:transparent;color:var(--muted);padding:9px 14px;cursor:pointer;min-height:40px}
-.pv button+button{border-left:1px dashed var(--muted)}
-.pv button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
 
 /* ===== Monitor view: fits one screen, no scrolling. Switched on with the "Monitor view" button (or #monitor in the address). ===== */
 .ctrls{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
@@ -374,11 +363,7 @@ body{overflow-x:hidden;overflow-x:clip}
   html.tv .ctrls{position:fixed;right:max(1.5vw,16px);bottom:.9vh;z-index:5}
   html.tv .top h1{white-space:nowrap;font-size:clamp(28px,6vh,72px)}
   html.tv .eyebrow{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:clamp(10px,1.5vh,16px);margin-bottom:.4vh}
-  html.tv .seg{display:none}
   html.tv .mon{min-height:clamp(28px,3.8vh,40px);font-size:clamp(10px,1.5vh,13px);padding:0 1vw;opacity:.6}
-  html.tv .preview{justify-self:end;align-self:center}
-  html.tv .preview .lbl{font-size:clamp(9px,1.3vh,12px)}
-  html.tv .pv button{min-height:clamp(28px,3.8vh,40px);padding:0 1vw;font-size:clamp(10px,1.4vh,13px)}
   html.tv .banner{justify-content:center;padding:1.8vh 1.6vw;gap:1vh}
   html.tv .banner .ghost{display:none}
   html.tv .tag{font-size:clamp(12px,1.9vh,22px)}
@@ -403,7 +388,7 @@ body{overflow-x:hidden;overflow-x:clip}
   html.tv .card.glow h2,html.tv .card.stench h2{font-size:clamp(20px,min(3.9vh,2.6vw),50px)}
   html.tv .crown{width:clamp(64px,10.5vh,116px);top:calc(-1 * clamp(32px,5.8vh,62px))}
   html.tv .hat{width:clamp(66px,11vh,118px);top:calc(-1 * clamp(34px,6.6vh,66px))}
-  html.tv #cards{margin-top:clamp(24px,4.2vh,48px)}
+  html.tv #cards{margin-top:clamp(18px,3.2vh,40px)}
   html.tv .card h2{font-size:clamp(24px,4.6vh,60px)}
   html.tv .card .sub{font-size:clamp(11px,1.6vh,18px)}
   html.tv .chip{font-size:clamp(11px,1.6vh,18px)}
@@ -423,7 +408,6 @@ body{overflow-x:hidden;overflow-x:clip}
 @media (min-width:700px) and (min-aspect-ratio:1/1){
   html.tv .wrap{grid-template-rows:auto auto auto minmax(0,1fr)}
   html.tv .top{grid-column:1/-1;grid-row:1}
-  html.tv .preview{grid-column:2;grid-row:1;z-index:2}
   html.tv .banner{grid-column:1/-1;grid-row:2;padding:1.4vh 1.6vw}
   html.tv .quip{font-size:clamp(18px,3.4vh,44px)}
   html.tv .track{grid-column:1/-1;grid-row:3;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);column-gap:1.8vw;row-gap:1vh;align-items:center}
@@ -443,25 +427,10 @@ body{overflow-x:hidden;overflow-x:clip}
       <h1>Matthews <span class="vs">vs</span> McDavid</h1>
     </div>
     <div class="ctrls">
-    <div class="seg" role="group" aria-label="Which stat decides the wager">
-      <button type="button" data-metric="goals" aria-pressed="true">Goals</button>
-      <button type="button" data-metric="points" aria-pressed="false">Points</button>
-      <button type="button" data-metric="assists" aria-pressed="false">Assists</button>
-    </div>
     <button type="button" class="mon" id="tvbtn" aria-pressed="false">Monitor view</button>
     </div>
   </header>
 
-  <!-- PREVIEW-TOGGLE:START (temporary) -->
-  <div class="preview">
-    <span class="lbl">Preview</span>
-    <div class="pv" role="group" aria-label="Preview who is leading">
-      <button type="button" data-preview="live" aria-pressed="true">Live</button>
-      <button type="button" data-preview="mat" aria-pressed="false">Matthews leads</button>
-      <button type="button" data-preview="mcd" aria-pressed="false">McDavid leads</button>
-    </div>
-  </div>
-  <!-- PREVIEW-TOGGLE:END -->
 
   <section class="track" id="track" aria-label="Race to 50 goals"></section>
 
@@ -774,9 +743,7 @@ body{overflow-x:hidden;overflow-x:clip}
   try { DATA = JSON.parse(raw.textContent); } catch (e) { DATA = null; }
 
   var metric = 'goals';
-  try { var saved = localStorage.getItem('wager-metric-v2'); if (saved && KEY[saved]) metric = saved; } catch (e) {}
   var quipShift = 0;
-  var preview = 'live'; // PREVIEW-TOGGLE (temporary): 'live', 'mat' or 'mcd'
 
   function fmtTime(sec){ var m = Math.floor(sec / 60), s = Math.round(sec % 60); if (s === 60){ m++; s = 0; } return m + ':' + (s < 10 ? '0' : '') + s; }
   function fmtDate(d){ return new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month:'short', day:'numeric' }); }
@@ -900,7 +867,6 @@ body{overflow-x:hidden;overflow-x:clip}
     var diff = sm.g - sc.g;
     var state = diff > 0 ? 'mat' : (diff < 0 ? 'mcd' : 'tie');
     var realState = state;
-    if (preview !== 'live') state = preview; // PREVIEW-TOGGLE (temporary)
     var margin = Math.abs(diff);
     var unit = margin === 1 ? 'goal' : 'goals';
 
@@ -928,7 +894,7 @@ body{overflow-x:hidden;overflow-x:clip}
     var upd = DATA.updatedAt ? new Date(DATA.updatedAt) : null;
     var stale = upd && (Date.now() - upd.getTime()) > 40 * 3600 * 1000;
     $('#foot').innerHTML =
-      '<p>The wager is decided by goals, so the banner always tracks goals. ' + (metric === 'goals' ? '' : 'The ' + metric + ' view is for trash talk only. ') + 'Use the buttons at the top to change what the cards and charts show.</p>' +
+      '<p>The wager is decided by goals, so everything on this page tracks goals.</p>' +
       '<p>Counts every regular-season game through ' + (lastDate ? fmtDate(lastDate) : 'the latest game') + '. ' +
       (upd ? 'Last refreshed ' + upd.toLocaleString('en-US', { month:'short', day:'numeric', hour:'numeric', minute:'2-digit' }) + '.' : '') + '</p>' +
       '<p>Numbers come from the NHL stats feed and refresh automatically after games, so they can trail the final horn by several hours.</p>' +
@@ -940,32 +906,7 @@ body{overflow-x:hidden;overflow-x:clip}
     }
   }
 
-  Array.prototype.forEach.call(document.querySelectorAll('.seg button'), function(btn){
-    btn.addEventListener('click', function(){
-      metric = btn.getAttribute('data-metric');
-      quipShift = 0;
-      try { localStorage.setItem('wager-metric-v2', metric); } catch (e) {}
-      Array.prototype.forEach.call(document.querySelectorAll('.seg button'), function(b){
-        b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
-      });
-      render();
-    });
-  });
   $('#again').addEventListener('click', function(){ quipShift++; render(); });
-  // PREVIEW-TOGGLE (temporary): remove this block together with the .preview markup and CSS
-  Array.prototype.forEach.call(document.querySelectorAll('.pv button'), function(btn){
-    btn.addEventListener('click', function(){
-      preview = btn.getAttribute('data-preview');
-      quipShift = 0;
-      Array.prototype.forEach.call(document.querySelectorAll('.pv button'), function(b){
-        b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
-      });
-      render();
-    });
-  });
-  Array.prototype.forEach.call(document.querySelectorAll('.seg button'), function(b){
-    b.setAttribute('aria-pressed', b.getAttribute('data-metric') === metric ? 'true' : 'false');
-  });
   applyTv();
   $('#tvbtn').addEventListener('click', function(){
     tvOn = !tvOn;
