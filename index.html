@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Matthews vs McDavid</title>
-<meta name="description" content="Auston Matthews vs Connor McDavid: season stats, goals race and the race to 50.">
+<meta name="description" content="Season stats, goals race and the race to 50.">
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data:; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data:; connect-src 'self' https://api-web.nhle.com https://search.d3.nhle.com; base-uri 'none'; form-action 'none'">
 <link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -161,26 +161,24 @@ table.log{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeri
 }
 .card{position:relative}
 
-/* Leader auras: both effects wrap the whole card, on all four sides */
+/* Leader glow: lives INSIDE the card edges, so it never washes over the text around the card */
 .glow{
   border-color:color-mix(in srgb,var(--gold) 70%,var(--surface));
-  box-shadow:0 0 22px 4px color-mix(in srgb,var(--gold) 48%,transparent),0 0 64px 18px color-mix(in srgb,var(--gold) 28%,transparent),0 0 120px 34px color-mix(in srgb,var(--gold) 14%,transparent),inset 0 0 34px color-mix(in srgb,var(--gold) 18%,transparent);
+  box-shadow:inset 0 0 24px 2px color-mix(in srgb,var(--gold) 46%,transparent),inset 0 0 64px 6px color-mix(in srgb,var(--gold) 26%,transparent),inset 0 0 120px 14px color-mix(in srgb,var(--gold) 12%,transparent);
 }
 .glow::before{
-  content:"";position:absolute;inset:-30px;border-radius:36px;z-index:-1;pointer-events:none;
-  background:radial-gradient(55% 55% at 20% 10%,color-mix(in srgb,var(--gold) 40%,transparent),transparent 70%),radial-gradient(55% 55% at 85% 90%,color-mix(in srgb,#ffe27a 36%,transparent),transparent 70%),radial-gradient(40% 40% at 90% 15%,color-mix(in srgb,var(--gold) 26%,transparent),transparent 70%),radial-gradient(40% 40% at 10% 90%,color-mix(in srgb,#fff1a8 24%,transparent),transparent 70%);
-  filter:blur(24px);
+  content:"";position:absolute;inset:0;border-radius:inherit;z-index:-1;pointer-events:none;
+  background:radial-gradient(60% 50% at 18% 6%,color-mix(in srgb,var(--gold) 22%,transparent),transparent 72%),radial-gradient(60% 50% at 86% 96%,color-mix(in srgb,#ffe27a 20%,transparent),transparent 72%),radial-gradient(45% 45% at 96% 12%,color-mix(in srgb,var(--gold) 14%,transparent),transparent 72%),radial-gradient(45% 45% at 4% 92%,color-mix(in srgb,#fff1a8 12%,transparent),transparent 72%);
 }
 .stench{
   border-color:color-mix(in srgb,var(--stink) 80%,var(--line));
-  box-shadow:0 0 22px 4px color-mix(in srgb,var(--stink) 42%,transparent),0 0 64px 16px color-mix(in srgb,var(--stink) 24%,transparent),inset 0 0 40px color-mix(in srgb,var(--stink) 24%,transparent);
+  box-shadow:inset 0 0 26px 2px color-mix(in srgb,var(--stink) 40%,transparent),inset 0 0 70px 8px color-mix(in srgb,var(--stink) 22%,transparent);
 }
 .stench::before{
-  content:"";position:absolute;inset:-26px;border-radius:34px;z-index:-1;pointer-events:none;
-  background:radial-gradient(55% 55% at 15% 85%,color-mix(in srgb,var(--stink) 36%,transparent),transparent 70%),radial-gradient(55% 55% at 85% 15%,color-mix(in srgb,#b6c93a 30%,transparent),transparent 70%),radial-gradient(45% 45% at 50% 100%,color-mix(in srgb,var(--stink) 28%,transparent),transparent 70%);
-  filter:blur(22px);
+  content:"";position:absolute;inset:0;border-radius:inherit;z-index:-1;pointer-events:none;
+  background:radial-gradient(55% 55% at 15% 88%,color-mix(in srgb,var(--stink) 24%,transparent),transparent 72%),radial-gradient(55% 55% at 86% 14%,color-mix(in srgb,#b6c93a 20%,transparent),transparent 72%),radial-gradient(45% 45% at 50% 100%,color-mix(in srgb,var(--stink) 18%,transparent),transparent 72%);
 }
-.aura{position:absolute;inset:0;pointer-events:none;z-index:2}
+.aura{position:absolute;inset:0;pointer-events:none;z-index:2;overflow:hidden;border-radius:inherit}
 .puff{
   --k:1;position:absolute;left:var(--x);top:var(--y);
   width:calc(var(--w) * var(--k));height:calc(var(--w) * var(--k));
@@ -198,24 +196,24 @@ table.log{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeri
   .glow .puff{animation:twinkle 3s ease-out var(--d) infinite}
   .stench .puff{animation:waft 3.6s ease-in-out var(--d) infinite}
   @keyframes halo{
-    0%,100%{box-shadow:0 0 22px 4px color-mix(in srgb,var(--gold) 48%,transparent),0 0 64px 18px color-mix(in srgb,var(--gold) 28%,transparent),0 0 120px 34px color-mix(in srgb,var(--gold) 14%,transparent),inset 0 0 34px color-mix(in srgb,var(--gold) 18%,transparent)}
-    50%{box-shadow:0 0 34px 8px color-mix(in srgb,var(--gold) 68%,transparent),0 0 90px 28px color-mix(in srgb,var(--gold) 40%,transparent),0 0 150px 48px color-mix(in srgb,var(--gold) 22%,transparent),inset 0 0 50px color-mix(in srgb,var(--gold) 28%,transparent)}
+    0%,100%{box-shadow:inset 0 0 24px 2px color-mix(in srgb,var(--gold) 46%,transparent),inset 0 0 64px 6px color-mix(in srgb,var(--gold) 26%,transparent),inset 0 0 120px 14px color-mix(in srgb,var(--gold) 12%,transparent)}
+    50%{box-shadow:inset 0 0 34px 6px color-mix(in srgb,var(--gold) 62%,transparent),inset 0 0 84px 12px color-mix(in srgb,var(--gold) 36%,transparent),inset 0 0 140px 22px color-mix(in srgb,var(--gold) 18%,transparent)}
   }
   @keyframes stink{
-    0%,100%{box-shadow:0 0 22px 4px color-mix(in srgb,var(--stink) 42%,transparent),0 0 64px 16px color-mix(in srgb,var(--stink) 24%,transparent),inset 0 0 40px color-mix(in srgb,var(--stink) 24%,transparent)}
-    50%{box-shadow:0 0 32px 8px color-mix(in srgb,var(--stink) 60%,transparent),0 0 88px 26px color-mix(in srgb,var(--stink) 36%,transparent),inset 0 0 56px color-mix(in srgb,var(--stink) 34%,transparent)}
+    0%,100%{box-shadow:inset 0 0 26px 2px color-mix(in srgb,var(--stink) 40%,transparent),inset 0 0 70px 8px color-mix(in srgb,var(--stink) 22%,transparent)}
+    50%{box-shadow:inset 0 0 36px 6px color-mix(in srgb,var(--stink) 56%,transparent),inset 0 0 90px 14px color-mix(in srgb,var(--stink) 32%,transparent)}
   }
   @keyframes drift{from{transform:translate(-8px,-5px) scale(1)}to{transform:translate(8px,5px) scale(1.05)}}
   @keyframes twinkle{
     0%{transform:translate(0,0) scale(.3);opacity:0}
     25%{opacity:1}
-    100%{transform:translate(calc(var(--dx) * 54px),calc(var(--dy) * 54px)) scale(1.1);opacity:0}
+    100%{transform:translate(calc(var(--dx) * -54px),calc(var(--dy) * -54px)) scale(1.1);opacity:0}
   }
   @keyframes waft{
     0%{transform:translate(0,0) scale(.5);opacity:0}
     20%{opacity:.9}
-    60%{transform:translate(calc(var(--dx) * 36px + 6px),calc(var(--dy) * 36px - 12px)) scale(1)}
-    100%{transform:translate(calc(var(--dx) * 74px - 6px),calc(var(--dy) * 74px - 28px)) scale(1.7);opacity:0}
+    60%{transform:translate(calc(var(--dx) * -36px - 6px),calc(var(--dy) * -36px - 12px)) scale(1)}
+    100%{transform:translate(calc(var(--dx) * -74px - 6px),calc(var(--dy) * -74px - 28px)) scale(1.7);opacity:0}
   }
   @keyframes queasy{0%,100%{transform:translateX(0)}25%{transform:translateX(-1.5px) rotate(-.4deg)}75%{transform:translateX(1.5px) rotate(.4deg)}}
 }
@@ -224,7 +222,7 @@ table.log{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeri
 .glow{
   border:2px solid transparent;
   background:linear-gradient(var(--surface),var(--surface)) padding-box,linear-gradient(135deg,#f6e27a,#c9a227 30%,#fff1a8 50%,#b8901f 72%,#f0d060) border-box;
-  top:-8px;margin-inline:-6px;
+  margin-inline:-6px;
 }
 .glow h2{position:relative;display:inline-block;vertical-align:top;overflow:hidden}
 .glow h2::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 35%,rgba(255,236,150,.85) 50%,transparent 65%);transform:translateX(-120%)}
@@ -280,7 +278,7 @@ table.log{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeri
 .glow h2{
   font-family:'Cinzel',Georgia,'Times New Roman',serif;font-weight:900;font-size:26px;letter-spacing:.03em;line-height:1.15;
   background:linear-gradient(180deg,#fff3b0 0%,#f2c94c 45%,#b8861b 100%);-webkit-background-clip:text;background-clip:text;
-  color:transparent;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 10px rgba(242,201,76,.45));
+  color:transparent;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 5px rgba(242,201,76,.35));
 }
 .glow .sub{color:#d9c27a;letter-spacing:.04em}
 .glow .stat dd{color:var(--gold);text-shadow:0 0 12px rgba(242,201,76,.35)}
@@ -291,7 +289,7 @@ table.log{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeri
 .glow .a-mat{fill:var(--gold);fill-opacity:.16}
 .glow .d-mat{fill:var(--gold)}
 .glow .t-mat{fill:var(--gold)}
-.crown{position:absolute;left:20px;top:-38px;width:74px;z-index:4;transform:rotate(-7deg);transform-origin:50% 100%;pointer-events:none;filter:drop-shadow(0 0 10px rgba(242,201,76,.75))}
+.crown{position:absolute;left:20px;top:-38px;width:74px;z-index:4;transform:rotate(-7deg);transform-origin:50% 100%;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(0,0,0,.5))}
 .crown svg{display:block;width:100%;height:auto;overflow:visible}
 .crown .glint{fill:#fff;opacity:0}
 
@@ -331,7 +329,16 @@ table.log{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeri
 .bdg.hot{color:#ffa142;border-color:color-mix(in srgb,#ffa142 45%,transparent);background:color-mix(in srgb,#ff7a1a 14%,transparent)}
 .bdg.cold{color:#86d6ff;border-color:color-mix(in srgb,#86d6ff 45%,transparent);background:color-mix(in srgb,#86d6ff 12%,transparent)}
 .bdg.gold{color:#2a1d00;background:linear-gradient(180deg,#fff3b0,#f2c94c);border-color:#b8861b}
-.glow .bdgs{padding-right:70px}
+.who{flex:1 1 0;min-width:0}
+.nm{display:flex;align-items:center;gap:10px;min-width:0}
+.nm h2{flex:none;white-space:nowrap}
+.hl{display:flex;align-items:center;gap:6px;flex:1 1 0;min-width:0;overflow:hidden}
+.hl .bdg{flex:none}
+.gm{display:flex;min-height:26px;margin-top:8px;min-width:0}
+.gm .bdg{max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.glow .who{padding-right:70px}
+a.mon{display:inline-flex;align-items:center;text-decoration:none}
+.mon[hidden]{display:none}
 .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:0}
 .fact{border:1px solid var(--line);border-radius:7px;padding:9px 12px 8px;background:var(--surface);min-width:0}
 .fact dt{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
@@ -411,7 +418,7 @@ body{overflow-x:hidden;overflow-x:clip}
   html.tv .wrap{max-width:none;height:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5vh 1.5vw}
   html.tv .top{align-items:center;flex-wrap:nowrap;justify-content:space-between;gap:1vw}
   html.tv .top > div:first-child{min-width:0;max-width:58vw}
-  html.tv .ctrls{position:fixed;right:max(1.5vw,16px);bottom:.9vh;z-index:5}
+  html.tv .ctrls{position:fixed;right:max(1.5vw,16px);bottom:.9vh;z-index:5;gap:.6vw;flex-wrap:nowrap}
   html.tv .top h1{white-space:nowrap;font-size:clamp(28px,6vh,72px)}
   html.tv .eyebrow{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:clamp(10px,1.5vh,16px);margin-bottom:.4vh}
   html.tv .mon{min-height:clamp(28px,3.8vh,40px);font-size:clamp(10px,1.5vh,13px);padding:0 1vw;opacity:.6}
@@ -434,8 +441,7 @@ body{overflow-x:hidden;overflow-x:clip}
   html.tv .track .stat dd{font-size:clamp(18px,3.4vh,44px)}
   html.tv #cards{gap:1.5vw;min-height:0}
   html.tv .card{padding:1.5vh 1.4vw;gap:1.2vh;min-height:0}
-  html.tv .card.stench{padding-top:calc(1.5vh + 22px)}
-  html.tv .card.glow{padding-top:calc(1.5vh + 16px)}
+  html.tv .card,html.tv .card.stench,html.tv .card.glow{padding-top:calc(1.5vh + 20px)}
   html.tv .card.glow h2,html.tv .card.stench h2{font-size:clamp(20px,min(3.9vh,2.6vw),50px)}
   html.tv .crown{width:clamp(64px,10.5vh,116px);top:calc(-1 * clamp(32px,5.8vh,62px))}
   html.tv .hat{width:clamp(66px,11vh,118px);top:calc(-1 * clamp(34px,6.6vh,66px))}
@@ -452,11 +458,13 @@ body{overflow-x:hidden;overflow-x:clip}
   html.tv .card > div:nth-last-child(2) svg{flex:1 1 0;min-height:0;width:100%;height:100%}
   html.tv .card > div:last-child{display:none}
   html.tv .race,html.tv .foot{display:none}
-  html.tv .bar{position:fixed;left:max(1.5vw,16px);right:calc(max(1.5vw,16px) + clamp(112px,10vw,150px) + 14px);bottom:.7vh;z-index:4;gap:1.4vw}
+  html.tv .bar{position:fixed;left:max(1.5vw,16px);right:calc(max(1.5vw,16px) + var(--ctrlw,150px) + 14px);bottom:.7vh;z-index:4;gap:1.4vw}
   html.tv .stamp{display:block;position:static;flex:none;white-space:nowrap;margin:0;font-size:clamp(11px,1.5vh,18px);color:var(--muted)}
   html.tv .recap{border:0;background:transparent;padding:0;font-size:clamp(11px,1.6vh,19px);-webkit-mask-image:linear-gradient(90deg,transparent,#000 2%,#000 98%,transparent);mask-image:linear-gradient(90deg,transparent,#000 2%,#000 98%,transparent)}
   html.tv .rcopy{flex-wrap:nowrap;white-space:nowrap}
-  html.tv .bdgs{margin-top:.6vh;gap:.4vw}
+  html.tv .nm{gap:.8vw;min-height:clamp(34px,5.6vh,72px)}
+  html.tv .hl{gap:.4vw}
+  html.tv .gm{min-height:clamp(18px,2.8vh,30px);margin-top:.6vh}
   html.tv .bdg{font-size:clamp(10px,1.45vh,15px);padding:.2vh .7vw}
   html.tv .bdg svg{width:clamp(11px,1.6vh,16px);height:clamp(11px,1.6vh,16px)}
   html.tv .facts{grid-template-columns:repeat(4,minmax(0,1fr));gap:1vw}
@@ -480,6 +488,26 @@ body{overflow-x:hidden;overflow-x:clip}
   html.tv .facts{grid-column:1/-1;grid-row:4}
   html.tv #cards{grid-column:1/-1;grid-row:5}
 }
+/* Same top spacing on both cards so their rows line up */
+.grid .card,.grid .card.glow,.grid .card.stench{padding-top:34px}
+/* ===== Player picker dialog (shared by both pages) ===== */
+dialog#pickdlg{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:20px 22px;width:min(560px,92vw);max-height:86vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+dialog#pickdlg::backdrop{background:rgba(3,8,14,.72)}
+#pickdlg h2{margin:0 0 4px;font-family:var(--font-display);font-weight:700;font-size:28px;line-height:1.1}
+#pickdlg .pk-note{margin:0 0 14px;color:var(--muted);font-size:13px}
+.pk-slot{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:12px}
+.pk-slot h3{margin:0 0 4px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.pk-cur{margin:0 0 8px}
+.pk-slot input{width:100%;font:inherit;padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);min-height:44px}
+.pk-res{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:4px}
+.pk-res button,.pk-btn{font:inherit;text-align:left;width:100%;padding:9px 12px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;min-height:40px}
+.pk-res button:hover,.pk-btn:hover{border-color:var(--mat)}
+.pk-res button:focus-visible,.pk-btn:focus-visible,.pk-slot input:focus-visible{outline:2px solid var(--mat);outline-offset:2px}
+.pk-res .pk-sub{color:var(--muted);font-size:13px;margin-left:6px}
+.pk-reset{margin-top:8px;color:var(--muted)}
+.pk-msg{min-height:1.5em;margin:4px 0 10px;color:var(--muted);font-size:13px}
+.pk-msg.err{color:var(--bad)}
+
 </style>
 </head>
 <body>
@@ -487,9 +515,11 @@ body{overflow-x:hidden;overflow-x:clip}
   <header class="top">
     <div>
       <p class="eyebrow">2026-27 regular season &middot; friendly wager &middot; most goals wins</p>
-      <h1>Matthews <span class="vs">vs</span> McDavid</h1>
+      <h1><span id="h1a">Matthews</span> <span class="vs">vs</span> <span id="h1b">McDavid</span></h1>
     </div>
     <div class="ctrls">
+    <a class="mon" id="navlink" href="drive50.html" hidden>Drive for 50</a>
+    <button type="button" class="mon" id="pickbtn" hidden>Players</button>
     <button type="button" class="mon" id="tvbtn" aria-pressed="false">Monitor view</button>
     </div>
   </header>
@@ -516,7 +546,144 @@ body{overflow-x:hidden;overflow-x:clip}
 
 <div id="confetti" aria-hidden="true"></div>
 <div id="toast" role="status" aria-live="polite"></div>
+<dialog id="pickdlg" aria-labelledby="pk-title">
+  <h2 id="pk-title">Choose players</h2>
+  <p class="pk-note">Search any NHL skater by name. Your choice is remembered on this screen only.</p>
+  <div id="pk-body"></div>
+  <p class="pk-msg" id="pk-msg" role="status" aria-live="polite"></p>
+  <button type="button" class="pk-btn" id="pk-close">Done</button>
+</dialog>
 
+
+<script>
+/* Player picker: search any NHL skater and load his season from the NHL feed, right in the browser. */
+(function(){
+  var NHL = 'https://api-web.nhle.com/v1/';
+  var SEARCH = 'https://search.d3.nhle.com/api/v1/search/player?culture=en-us&limit=10&active=true&q=';
+  var KEY = 'players-v1';
+
+  function getJson(url){
+    return fetch(url, { cache:'no-store' }).then(function(r){
+      if (!r.ok) throw new Error('The NHL answered with an error (' + r.status + ').');
+      return r.json();
+    });
+  }
+  function toSeconds(t){
+    var p = String(t || '0:00').split(':').map(Number);
+    if (p.some(isNaN)) return 0;
+    return p.length === 3 ? p[0] * 3600 + p[1] * 60 + p[2] : p[0] * 60 + (p[1] || 0);
+  }
+  function gamesFrom(log){
+    return (log.gameLog || []).map(function(g){
+      return { d:g.gameDate, o:g.opponentAbbrev, g:+g.goals || 0, a:+g.assists || 0, p:+g.points || 0, t:toSeconds(g.toi) };
+    }).sort(function(x, y){ return x.d < y.d ? -1 : (x.d > y.d ? 1 : 0); });
+  }
+  function schedFrom(data, abbr){
+    var now = Date.now(), out = [];
+    (data.games || []).forEach(function(g){
+      if (g.gameType !== 2 || !g.startTimeUTC) return;
+      if (new Date(g.startTimeUTC).getTime() < now - 8 * 3600 * 1000) return;
+      var home = (g.homeTeam || {}).abbrev, away = (g.awayTeam || {}).abbrev, isHome = home === abbr;
+      out.push({ id:g.id, s:g.startTimeUTC, st:g.gameState, o:isHome ? away : home, h:isHome });
+    });
+    out.sort(function(x, y){ return x.s < y.s ? -1 : (x.s > y.s ? 1 : 0); });
+    return out.slice(0, 4);
+  }
+  function loadPlayer(id){
+    return Promise.all([getJson(NHL + 'player/' + id + '/landing'), getJson(NHL + 'player/' + id + '/game-log/now')]).then(function(r){
+      var land = r[0], log = r[1];
+      var name = ((land.firstName || {}).default || '') + ' ' + ((land.lastName || {}).default || '');
+      name = name.trim() || 'That player';
+      if (land.position === 'G') throw new Error(name + ' is a goalie. Pick a skater.');
+      var again = (log.gameTypeId !== 2 && log.seasonId) ? getJson(NHL + 'player/' + id + '/game-log/' + log.seasonId + '/2') : Promise.resolve(log);
+      return again.then(function(lg){
+        var games = gamesFrom(lg);
+        if (!games.length) throw new Error(name + ' has not played a regular-season game yet.');
+        var abbr = land.currentTeamAbbrev || '';
+        var pl = {
+          id:'nhl' + id, nhlId:id, name:name, abbr:abbr,
+          team:(land.fullTeamName || {}).default || abbr,
+          num:land.sweaterNumber || '', pos:land.position || '', games:games, sched:[]
+        };
+        if (!abbr) return pl;
+        return getJson(NHL + 'club-schedule-season/' + abbr + '/now').then(function(s){ pl.sched = schedFrom(s, abbr); return pl; }, function(){ return pl; });
+      });
+    });
+  }
+  function search(q){
+    return getJson(SEARCH + encodeURIComponent(q)).then(function(arr){
+      return (arr || []).filter(function(x){ return x.positionCode !== 'G'; }).map(function(x){
+        return { id:+x.playerId, name:x.name, abbr:x.teamAbbrev || x.lastTeamAbbrev || '', pos:x.positionCode || '', num:x.sweaterNumber || '' };
+      });
+    });
+  }
+  function saved(){ try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
+  function save(o){ try { localStorage.setItem(KEY, JSON.stringify(o)); } catch (e) {} }
+
+  function open(cfg){
+    var dlg = document.getElementById('pickdlg'), body = document.getElementById('pk-body'), msg = document.getElementById('pk-msg');
+    if (!dlg || !dlg.showModal) return;
+    document.getElementById('pk-title').textContent = cfg.title;
+    body.innerHTML = '';
+    msg.textContent = '';
+    msg.className = 'pk-msg';
+    function say(text, bad){ msg.textContent = text; msg.className = 'pk-msg' + (bad ? ' err' : ''); }
+    var sv = saved();
+    cfg.slots.forEach(function(slot){
+      var sec = document.createElement('section'); sec.className = 'pk-slot';
+      var h3 = document.createElement('h3'); h3.textContent = slot.label;
+      var cur = document.createElement('p'); cur.className = 'pk-cur';
+      var curName = document.createElement('b');
+      function showCur(){ var s = saved(); curName.textContent = (s[slot.key] && s[slot.key].name) ? s[slot.key].name : slot.def + ' (default)'; }
+      showCur();
+      cur.appendChild(document.createTextNode('Now showing: ')); cur.appendChild(curName);
+      var input = document.createElement('input'); input.type = 'search'; input.placeholder = 'Search any NHL skater, e.g. MacKinnon'; input.setAttribute('aria-label', 'Search for a player: ' + slot.label); input.autocomplete = 'off';
+      var list = document.createElement('ul'); list.className = 'pk-res';
+      var reset = document.createElement('button'); reset.type = 'button'; reset.className = 'pk-btn pk-reset'; reset.textContent = 'Go back to ' + slot.def;
+      sec.appendChild(h3); sec.appendChild(cur); sec.appendChild(input); sec.appendChild(list); sec.appendChild(reset);
+      body.appendChild(sec);
+      var timer = null, ticket = 0;
+      input.addEventListener('input', function(){
+        clearTimeout(timer);
+        var q = input.value.trim();
+        if (q.length < 2){ list.innerHTML = ''; return; }
+        timer = setTimeout(function(){
+          var mine = ++ticket;
+          search(q).then(function(rows){
+            if (mine !== ticket) return;
+            list.innerHTML = '';
+            if (!rows.length){ say('No skaters found for "' + q + '".'); return; }
+            say('');
+            rows.forEach(function(r){
+              var li = document.createElement('li'), b = document.createElement('button'), sub = document.createElement('span');
+              b.type = 'button'; b.textContent = r.name;
+              sub.className = 'pk-sub'; sub.textContent = [r.abbr, r.pos, r.num ? '#' + r.num : ''].filter(Boolean).join(' · ');
+              b.appendChild(sub); li.appendChild(b); list.appendChild(li);
+              b.addEventListener('click', function(){
+                say('Loading ' + r.name + '...');
+                loadPlayer(r.id).then(function(pl){
+                  var s = saved(); s[slot.key] = { id:r.id, name:pl.name }; save(s);
+                  showCur(); list.innerHTML = ''; input.value = '';
+                  say('Switched to ' + pl.name + '.');
+                  cfg.onChange(slot.key, pl);
+                }, function(e){ say((e && e.message) || 'Could not load that player.', true); });
+              });
+            });
+          }, function(){ if (mine === ticket) say('Could not reach the NHL player search from this browser.', true); });
+        }, 300);
+      });
+      reset.addEventListener('click', function(){
+        var s = saved(); delete s[slot.key]; save(s); showCur(); list.innerHTML = '';
+        say('Back to ' + slot.def + '.');
+        cfg.onChange(slot.key, null);
+      });
+    });
+    document.getElementById('pk-close').onclick = function(){ dlg.close(); };
+    dlg.showModal();
+  }
+  window.Pick = { saved:saved, save:save, loadPlayer:loadPlayer, search:search, open:open };
+})();
+</script>
 <script id="nhl-data" type="application/json">
 {"season":"20262027","updatedAt":"2026-10-16T18:55:00Z","players":[
 {"id":"matthews","name":"Auston Matthews","team":"Toronto Maple Leafs","abbr":"TOR","num":34,"pos":"C","games":[
@@ -689,9 +856,7 @@ body{overflow-x:hidden;overflow-x:clip}
     }).join('') + '</div>';
   }
   var lastState = null, curState = 'tie';
-  var autoReloaded = false;
-  try { autoReloaded = sessionStorage.getItem('autoreload') === '1'; sessionStorage.removeItem('autoreload'); } catch (e) {}
-  var PENNANT = '<div class="pennant" aria-hidden="true"><span class="n">34</span><span class="t">Goals<br>leader</span></div>';
+  function pennant(pl){ return '<div class="pennant" aria-hidden="true"><span class="n">' + esc(pl.num || '') + '</span><span class="t">Goals<br>leader</span></div>'; }
   function webSvg(cls){
     var radials = [0, 22.5, 45, 67.5, 90], radii = [22, 42, 64, 90], d = '';
     radials.forEach(function(a){ var r = a * Math.PI / 180; d += 'M0 0L' + (90 * Math.cos(r)).toFixed(1) + ' ' + (90 * Math.sin(r)).toFixed(1); });
@@ -756,9 +921,10 @@ body{overflow-x:hidden;overflow-x:clip}
     }
   }
   var GOAL = 50, SEASON_GAMES = 82;
-  function renderTrack(s){
+  function renderTrack(s, pl){
     var el = $('#track');
     if (!el) return;
+    var nm = lastName(pl);
     var left = Math.max(SEASON_GAMES - s.gp, 0);
     var avg = s.gp ? s.g / s.gp : 0;
     var proj = s.g + avg * left;
@@ -773,17 +939,17 @@ body{overflow-x:hidden;overflow-x:clip}
     var paceCls = pacePct < 18 ? ' early' : (pacePct > 82 ? ' late' : '');
     var text;
     if (done){
-      text = 'Matthews has reached 50 goals. The bet is won.';
+      text = nm + ' has reached 50 goals. The bet is won.';
     } else if (!s.gp){
       text = 'No games played yet, so there is no pace to measure.';
     } else if (on){
-      text = 'At ' + avg.toFixed(2) + ' goals a game, Matthews is on pace for about ' + Math.floor(proj) + ' goals over the remaining ' + left + ' games. He only needs ' + need.toFixed(2) + ' a game to reach 50.';
+      text = 'At ' + avg.toFixed(2) + ' goals a game, ' + nm + ' is on pace for about ' + Math.floor(proj) + ' goals over the remaining ' + left + ' games. He only needs ' + need.toFixed(2) + ' a game to reach 50.';
     } else {
-      text = 'At ' + avg.toFixed(2) + ' goals a game, Matthews is on pace for about ' + Math.floor(proj) + ' goals. He needs ' + need.toFixed(2) + ' a game over the remaining ' + left + ' games to reach 50.';
+      text = 'At ' + avg.toFixed(2) + ' goals a game, ' + nm + ' is on pace for about ' + Math.floor(proj) + ' goals. He needs ' + need.toFixed(2) + ' a game over the remaining ' + left + ' games to reach 50.';
     }
     var ticks = [0, 10, 20, 30, 40, 50].map(function(v){ return '<span style="left:' + (v / GOAL * 100) + '%">' + v + '</span>'; }).join('');
     el.innerHTML =
-      '<div class="track-top"><div><h2>Race to 50</h2><p class="sub">Auston Matthews, regular-season goals</p></div>' +
+      '<div class="track-top"><div><h2>Race to 50</h2><p class="sub">' + esc(pl.name) + ', regular-season goals</p></div>' +
       '<div class="big">' + s.g + ' <small>/ ' + GOAL + '</small></div></div>' +
       '<div class="meter-wrap"><div class="meter" role="img" aria-label="' + s.g + ' of ' + GOAL + ' goals">' +
         '<div class="meter-fill" style="width:' + pct.toFixed(2) + '%"></div>' +
@@ -807,6 +973,8 @@ body{overflow-x:hidden;overflow-x:clip}
 
   var raw = $('#nhl-data');
   var DATA = null;
+  var HOSTED = true;  // the hosted build switches this on (player search needs the NHL feed)
+  var custom = [null, null];  // players chosen with the Players button; null means the default player
   try { DATA = JSON.parse(raw.textContent); } catch (e) { DATA = null; }
 
   var metric = 'goals';
@@ -828,6 +996,41 @@ body{overflow-x:hidden;overflow-x:clip}
   function daysAgo(d){ return (Date.now() - new Date(d + 'T12:00:00').getTime()) / 86400000; }
   function ordinal(n){ return n === 1 ? '1st' : (n === 2 ? '2nd' : (n === 3 ? '3rd' : n + 'th')); }
   function lastName(p){ return p.name.split(' ').slice(-1)[0]; }
+  function firstName(p){ return p.name.split(' ')[0]; }
+  function baseById(id){ return DATA.players.filter(function(q){ return q.id === id; })[0] || null; }
+  function currentPair(){ return [custom[0] || baseById('matthews') || DATA.players[0], custom[1] || baseById('mcdavid') || DATA.players[1]]; }
+  function isDefaultPair(){ return !custom[0] && !custom[1]; }
+  function fill(arr, L, T){ return arr.map(function(s){ return s.replace(/\{L\}/g, L).replace(/\{T\}/g, T); }); }
+  var GEN_LEAD = [
+    '{L} leads. {T} is currently drafting a strongly worded excuse.',
+    '{L} is up. The scoreboard checked twice, just to be polite.',
+    '{L} is ahead. {T} has been advised to hydrate and lower expectations.',
+    'The lead belongs to {L}. {T} may borrow it later, with interest.',
+    '{L} is cooking. {T} is still reading the recipe.',
+    "That's a lead. You can tell because it's not {T}'s.",
+    '{L} takes the lead and refuses to give a speech. Too busy shooting.',
+    "A moment of silence for {T}'s goal total. It's being very brave.",
+    '{L} is winning, and he did it without getting fancy about it.',
+    '{T} can have the highlights. {L} will take the lead.',
+    "Goal totals don't lie. They just quietly rub it in.",
+    "{L} on top. {T}'s excuses are still in the printer."
+  ];
+  var GEN_EXCUSE = [
+    "{T}'s lucky stick is in witness protection. Nobody can confirm where.",
+    'The puck gets shy in front of {T}. It is a well-documented condition.',
+    '{T} is saving his goals for the playoffs. Very strategic. Very patient. Very behind.',
+    "Somebody put a pebble in {T}'s skate. There are no suspects.",
+    '{T} is playing the long game. A very, very long game.',
+    'The net got narrower for {T}. The league denies this, but the league would.',
+    '{T} is simply load-managing his goals. For the season.',
+    "{T}'s shot is currently in airplane mode. It'll reconnect eventually.",
+    '{L} is clearly wearing speed socks. A formal complaint has been drafted.',
+    "{L}'s lead is a clerical error. Please allow 6 to 8 weeks for correction.",
+    'Somebody typed the wrong stats in. {T} is owed several goals and an apology.',
+    "{T} is on a goal fast. It's a cleanse. It'll be great for him."
+  ];
+  var GEN_MAT_GOAL = ['Horn! Please clap.', 'The receipts are printing.', 'The net never saw it coming.'];
+  var GEN_MCD_GOAL = ['A moment of silence for the lead.', 'The puck had an opinion about this.', 'This is a clerical error and it will be corrected.'];
   function liveGoals(p){ return p.live ? (p.live.g || 0) : 0; }
   function streaksOf(p){
     var goal = 0, drought = 0, i;
@@ -852,22 +1055,39 @@ body{overflow-x:hidden;overflow-x:clip}
     if (d.toDateString() === now.toDateString()) return { cls:'tonight', text:(d.getHours() < 17 ? 'Today ' : 'Tonight ') + time + ' ' + vs };
     return { cls:'next', text:'Next ' + d.toLocaleDateString('en-US', { weekday:'short' }) + ' ' + time + ' ' + vs };
   }
-  function badgesHtml(p, s){
+  function highlightHtml(p, s){
     var out = [], st = streaksOf(p), last = p.games[p.games.length - 1];
-    var gb = gameBadge(p);
-    if (gb) out.push('<span class="bdg ' + gb.cls + '">' + esc(gb.text) + '</span>');
     if (last && daysAgo(last.d) <= 3.6){
-      if (last.g >= 3) out.push('<span class="bdg gold">' + ICON_STAR + 'Hat trick vs ' + esc(last.o) + '</span>');
-      else if (last.g === 2) out.push('<span class="bdg gold">' + ICON_STAR + '2-goal game vs ' + esc(last.o) + '</span>');
+      if (last.g >= 3) out.push('<span class="bdg gold">' + ICON_STAR + 'Hat trick</span>');
+      else if (last.g === 2) out.push('<span class="bdg gold">' + ICON_STAR + '2-goal game</span>');
       var before = s.g - last.g;
       [10, 20, 30, 40, 50].forEach(function(M){
         if (before < M && s.g >= M) out.push('<span class="bdg gold">' + ICON_STAR + 'Hit ' + M + ' goals</span>');
       });
     }
-    if (st.goal >= 3) out.push('<span class="bdg hot">' + ICON_FLAME + st.goal + '-game goal streak</span>');
-    else if (st.drought >= 3) out.push('<span class="bdg cold">' + ICON_ICE + 'Goalless in ' + st.drought + ' games</span>');
-    out = out.slice(0, 3);
-    return out.length ? '<div class="bdgs">' + out.join('') + '</div>' : '';
+    if (st.goal >= 3) out.push('<span class="bdg hot">' + ICON_FLAME + st.goal + '-game streak</span>');
+    else if (st.drought >= 3) out.push('<span class="bdg cold">' + ICON_ICE + 'Goalless in ' + st.drought + '</span>');
+    return '<div class="hl">' + out.slice(0, 3).join('') + '</div>';
+  }
+  var gameRowOn = false;
+  function gameRowHtml(p){
+    if (!gameRowOn) return '';
+    var gb = gameBadge(p);
+    return '<div class="gm">' + (gb ? '<span class="bdg ' + gb.cls + '">' + esc(gb.text) + '</span>' : '') + '</div>';
+  }
+  // Hide badges that do not fit beside the name, so both cards keep the same single-line header.
+  function fitBadges(){
+    Array.prototype.forEach.call(document.querySelectorAll('.hl'), function(row){
+      var kids = Array.prototype.slice.call(row.children);
+      kids.forEach(function(k){ k.style.display = ''; });
+      for (var i = kids.length - 1; i >= 0 && row.scrollWidth > row.clientWidth + 1; i--) kids[i].style.display = 'none';
+    });
+    // Give both cards the same header height so the stat rows line up.
+    var heads = Array.prototype.slice.call(document.querySelectorAll('.card-head'));
+    heads.forEach(function(e){ e.style.minHeight = ''; });
+    var mh = 0;
+    heads.forEach(function(e){ mh = Math.max(mh, e.getBoundingClientRect().height); });
+    if (heads.length > 1) heads.forEach(function(e){ e.style.minHeight = mh + 'px'; });
   }
 
   function recapWhen(d){
@@ -918,39 +1138,40 @@ body{overflow-x:hidden;overflow-x:clip}
     return { changes:changes, daysM:daysM, daysC:daysC, daysT:daysT, bigM:bigM, bigC:bigC, total:ds.length };
   }
   function factsHtml(mat, mcd, sm, sc){
-    var ls = leadStats(mat, mcd);
+    var ls = leadStats(mat, mcd), vsNames = esc(lastName(mat)) + ' &ndash; ' + esc(lastName(mcd));
     var projM = Math.round(sm.gpg * SEASON_GAMES), projC = Math.round(sc.gpg * SEASON_GAMES);
     function pair(a, b){ return '<span class="fm">' + a + '</span> <span class="fd">&ndash;</span> <span class="fc">' + b + '</span>'; }
     function tile(dt, dd, sub){ return '<div class="fact"><dt>' + dt + '</dt><dd>' + dd + '<span class="fsub">' + sub + '</span></dd></div>'; }
     return tile('Lead changes', ls.changes, ls.changes === 1 ? 'time the lead has flipped' : 'times the lead has flipped') +
-      tile('Game days in front', pair(ls.daysM, ls.daysC), 'Matthews &ndash; McDavid' + (ls.daysT ? ' (' + ls.daysT + ' tied)' : '')) +
-      tile('Biggest lead', pair(ls.bigM, ls.bigC), 'in goals, Matthews &ndash; McDavid') +
-      tile('Projected finish', pair(projM, projC), 'goals over 82 games, Matthews &ndash; McDavid');
+      tile('Game days in front', pair(ls.daysM, ls.daysC), vsNames + (ls.daysT ? ' (' + ls.daysT + ' tied)' : '')) +
+      tile('Biggest lead', pair(ls.bigM, ls.bigC), 'in goals, ' + vsNames) +
+      tile('Projected finish', pair(projM, projC), 'goals over 82 games, ' + vsNames);
   }
 
   function dynamicQuips(state, c){
     var q = [], s = c.margin === 1 ? '' : 's', left = SEASON_GAMES - c.sm.gp;
+    var a = c.f1, b = c.f2;
     var tonightM = gameBadge(c.mat), tonightC = gameBadge(c.mcd);
     if (state === 'mat'){
-      q.push('Matthews has ' + c.sm.g + '. Connor has ' + c.sc.g + '. Math is just mean like that.');
-      if (c.margin >= 2) q.push(c.margin + ' goals clear. Connor needs to find the net, and maybe a map.');
-      if (c.stM.goal >= 3) q.push('Auston has scored in ' + c.stM.goal + ' straight games. Connor is still looking for the on switch.');
-      if (c.stC.drought >= 2) q.push('Connor is ' + c.stC.drought + ' games without a goal. Thoughts and prayers, mostly just thoughts.');
-      q.push('At this pace Auston finishes with ' + c.projM + ' goals. Connor finishes with ' + c.projC + '. Just saying.');
-      if (c.sm.gp <= c.sc.gp) q.push('Auston got there in ' + c.sm.gp + ' games. Connor needed ' + c.sc.gp + '.');
-      q.push('Auston is scoring ' + c.sm.gpg.toFixed(2) + ' a game. Connor is scoring ' + c.sc.gpg.toFixed(2) + '. Somebody check the thermostat in Edmonton.');
-      if (c.lastM && c.lastM.g >= 1 && daysAgo(c.lastM.d) <= 2.6) q.push('Auston scored against ' + c.lastM.o + ' last time out. ' + c.lastM.o + ' has been notified.');
-      if (tonightM && tonightM.cls !== 'next') q.push('Auston plays tonight. Connor, please do something dramatic about it.');
-      if (tonightC && tonightC.cls !== 'next') q.push("Connor plays tonight. Auston's lead is already nervously hydrating.");
+      q.push(c.n1 + ' has ' + c.sm.g + '. ' + c.n2 + ' has ' + c.sc.g + '. Math is just mean like that.');
+      if (c.margin >= 2) q.push(c.margin + ' goals clear. ' + b + ' needs to find the net, and maybe a map.');
+      if (c.stM.goal >= 3) q.push(a + ' has scored in ' + c.stM.goal + ' straight games. ' + b + ' is still looking for the on switch.');
+      if (c.stC.drought >= 2) q.push(b + ' is ' + c.stC.drought + ' games without a goal. Thoughts and prayers, mostly just thoughts.');
+      q.push('At this pace ' + a + ' finishes with ' + c.projM + ' goals. ' + b + ' finishes with ' + c.projC + '. Just saying.');
+      if (c.sm.gp <= c.sc.gp) q.push(a + ' got there in ' + c.sm.gp + ' games. ' + b + ' needed ' + c.sc.gp + '.');
+      q.push(a + ' is scoring ' + c.sm.gpg.toFixed(2) + ' a game. ' + b + ' is scoring ' + c.sc.gpg.toFixed(2) + '. Somebody check the thermostat over there.');
+      if (c.lastM && c.lastM.g >= 1 && daysAgo(c.lastM.d) <= 2.6) q.push(a + ' scored against ' + c.lastM.o + ' last time out. ' + c.lastM.o + ' has been notified.');
+      if (tonightM && tonightM.cls !== 'next') q.push(a + ' plays tonight. ' + b + ', please do something dramatic about it.');
+      if (tonightC && tonightC.cls !== 'next') q.push(b + " plays tonight. " + a + "'s lead is already nervously hydrating.");
     } else if (state === 'mcd'){
-      q.push('Connor has ' + c.sc.g + '. Auston has ' + c.sm.g + ', and a very detailed list of reasons why.');
-      if (c.margin >= 2) q.push('Connor is ' + c.margin + ' goals up. Statisticians call this temporary and meaningless.');
-      if (c.stM.drought >= 2) q.push('Auston is ' + c.stM.drought + ' games without a goal. The puck is just being shy.');
-      q.push('At this pace Auston still projects to ' + c.projM + '. That is a lot of trust the process.');
-      if (c.stC.goal >= 3) q.push('Connor has scored in ' + c.stC.goal + ' straight. It is a clerical error and it is being investigated.');
-      q.push('Auston is only ' + c.margin + ' goal' + s + ' back with ' + left + ' games to go. Panic is for amateurs and Connor.');
-      q.push('Connor is scoring ' + c.sc.gpg.toFixed(2) + ' a game. Auston is scoring ' + c.sm.gpg.toFixed(2) + '. A stat sheet just cleared its throat.');
-      if (tonightM && tonightM.cls !== 'next') q.push('Auston plays tonight. History says he cannot be stopped. History is also just a rumor.');
+      q.push(c.n2 + ' has ' + c.sc.g + '. ' + c.n1 + ' has ' + c.sm.g + ', and a very detailed list of reasons why.');
+      if (c.margin >= 2) q.push(b + ' is ' + c.margin + ' goals up. Statisticians call this temporary and meaningless.');
+      if (c.stM.drought >= 2) q.push(a + ' is ' + c.stM.drought + ' games without a goal. The puck is just being shy.');
+      q.push('At this pace ' + a + ' still projects to ' + c.projM + '. That is a lot of trust the process.');
+      if (c.stC.goal >= 3) q.push(b + ' has scored in ' + c.stC.goal + ' straight. It is a clerical error and it is being investigated.');
+      q.push(a + ' is only ' + c.margin + ' goal' + s + ' back with ' + left + ' games to go. Panic is for amateurs and ' + b + '.');
+      q.push(b + ' is scoring ' + c.sc.gpg.toFixed(2) + ' a game. ' + a + ' is scoring ' + c.sm.gpg.toFixed(2) + '. A stat sheet just cleared its throat.');
+      if (tonightM && tonightM.cls !== 'next') q.push(a + ' plays tonight. History says he cannot be stopped. History is also just a rumor.');
     }
     return q;
   }
@@ -969,16 +1190,18 @@ body{overflow-x:hidden;overflow-x:clip}
     if (quiet || !seen){ seen = { m:effM, c:effC }; quiet = false; return; }
     var gm = effM > seen.m, gc = effC > seen.c;
     if (!gm && !gc){ return; }
+    var n1 = lastName(mat), n2 = lastName(mcd), f1 = firstName(mat), f2 = firstName(mcd);
+    var dflt = isDefaultPair();
     var before = Math.sign(seen.m - seen.c), after = Math.sign(effM - effC);
     var lead = '';
-    if (after !== before){ lead = after > 0 ? ' Matthews takes the lead!' : (after < 0 ? ' McDavid takes the lead.' : ' All square!'); }
+    if (after !== before){ lead = after > 0 ? ' ' + n1 + ' takes the lead!' : (after < 0 ? ' ' + n2 + ' takes the lead.' : ' All square!'); }
     var pick = function(a){ return a[Math.floor(Math.random() * a.length)]; };
     if (gm){
       var hat = (mat.live && mat.live.g >= 3);
-      toast('mat', (hat ? 'Hat trick! ' : '') + 'Matthews scores!', 'Auston now has ' + effM + (effM === 1 ? ' goal.' : ' goals.') + lead + (gc ? ' Connor scored too (' + effC + ').' : ' ' + pick(MAT_GOAL_LINES)));
+      toast('mat', (hat ? 'Hat trick! ' : '') + n1 + ' scores!', f1 + ' now has ' + effM + (effM === 1 ? ' goal.' : ' goals.') + lead + (gc ? ' ' + f2 + ' scored too (' + effC + ').' : ' ' + pick(dflt ? MAT_GOAL_LINES : GEN_MAT_GOAL)));
       if (!burstAlready) requestAnimationFrame(burst);
     } else {
-      toast('mcd', 'McDavid scores', 'Connor now has ' + effC + (effC === 1 ? ' goal.' : ' goals.') + lead + ' ' + pick(MCD_GOAL_LINES));
+      toast('mcd', n2 + ' scores', f2 + ' now has ' + effC + (effC === 1 ? ' goal.' : ' goals.') + lead + ' ' + pick(dflt ? MCD_GOAL_LINES : GEN_MCD_GOAL));
     }
     seen.m = Math.max(seen.m, effM);
     seen.c = Math.max(seen.c, effC);
@@ -1078,8 +1301,8 @@ body{overflow-x:hidden;overflow-x:clip}
     var rows = p.games.slice(-5).reverse().map(function(x){
       return '<tr><td>' + fmtDate(x.d) + '</td><td>' + esc(x.o) + '</td><td>' + x.g + '</td><td>' + x.a + '</td><td>' + x.p + '</td><td>' + fmtTime(x.t) + '</td></tr>';
     }).join('');
-    return '<article class="card ' + cls + (isLead ? (cls === 'mat' ? ' glow' : ' stench') : (cls === 'mcd' && curState === 'mat' ? ' trail' : '')) + '">' + (isLead ? aura() + (cls === 'mat' ? PENNANT + CROWN : DECAY + HAT) : '') +
-      '<div class="card-head"><div><h2>' + esc(p.name) + '</h2><p class="sub">' + esc(p.team) + ' &middot; #' + esc(p.num) + ' &middot; ' + esc(p.pos) + '</p>' + badgesHtml(p, s) + '</div>' +
+    return '<article class="card ' + cls + (isLead ? (cls === 'mat' ? ' glow' : ' stench') : (cls === 'mcd' && curState === 'mat' ? ' trail' : '')) + '">' + (isLead ? aura() + (cls === 'mat' ? pennant(p) + CROWN : DECAY + HAT) : '') +
+      '<div class="card-head"><div class="who"><div class="nm"><h2>' + esc(p.name) + '</h2>' + highlightHtml(p, s) + '</div><p class="sub">' + esc(p.team) + ' &middot; #' + esc(p.num) + ' &middot; ' + esc(p.pos) + '</p>' + gameRowHtml(p) + '</div>' +
       (isLead && cls === 'mcd' ? '<span class="chip">Leads. For now.</span>' : '') + '</div>' +
       '<dl class="stats">' + tiles + '</dl>' +
       '<div><p class="block-title">Season ' + metric + ', game by game</p>' + spark(cumulative(p, k), topY, maxN, cls) + '</div>' +
@@ -1094,10 +1317,19 @@ body{overflow-x:hidden;overflow-x:clip}
       $('#cards').innerHTML = '<div class="empty">No stats yet. The next scheduled refresh will fill this in.</div>';
       return;
     }
-    var mat = DATA.players.filter(function(p){ return p.id === 'matthews'; })[0];
-    var mcd = DATA.players.filter(function(p){ return p.id === 'mcdavid'; })[0];
+    var pr = currentPair();
+    var mat = pr[0], mcd = pr[1];
+    if (!mat || !mcd || !mat.games.length || !mcd.games.length){
+      $('#cards').innerHTML = '<div class="empty">Waiting for the first game of the season.</div>';
+      return;
+    }
+    var n1 = lastName(mat), n2 = lastName(mcd), f1 = firstName(mat), f2 = firstName(mcd);
+    $('#h1a').textContent = n1;
+    $('#h1b').textContent = n2;
+    document.title = n1 + ' vs ' + n2;
+    gameRowOn = !!(gameBadge(mat) || gameBadge(mcd));
     var sm = summarize(mat), sc = summarize(mcd);
-    renderTrack(sm);
+    renderTrack(sm, mat);
     var k = KEY[metric];
     var diff = sm.g - sc.g;
     var state = diff > 0 ? 'mat' : (diff < 0 ? 'mcd' : 'tie');
@@ -1107,16 +1339,17 @@ body{overflow-x:hidden;overflow-x:clip}
 
     var banner = $('#banner');
     banner.className = 'banner is-' + state;
-    var list = state === 'mat' ? MAT_LEADS : (state === 'mcd' ? MCD_EXCUSES : TIES);
+    var list;
+    if (isDefaultPair()) list = state === 'mat' ? MAT_LEADS : (state === 'mcd' ? MCD_EXCUSES : TIES);
+    else list = state === 'mat' ? fill(GEN_LEAD, f1, f2) : (state === 'mcd' ? fill(GEN_EXCUSE, f2, f1) : TIES);
     var seed = hash((DATA.updatedAt || '').slice(0, 10) + 'goals' + state);
-    var ctx = { mat:mat, mcd:mcd, sm:sm, sc:sc, margin:margin, stM:streaksOf(mat), stC:streaksOf(mcd),
+    var ctx = { f1:f1, f2:f2, n1:n1, n2:n2, mat:mat, mcd:mcd, sm:sm, sc:sc, margin:margin, stM:streaksOf(mat), stC:streaksOf(mcd),
       projM:Math.round(sm.gpg * SEASON_GAMES), projC:Math.round(sc.gpg * SEASON_GAMES),
       lastM:mat.games[mat.games.length - 1] };
     var pool = list.slice();
     dynamicQuips(state, ctx).forEach(function(qq){ pool.push(qq, qq, qq); });
     $('#quip').textContent = pool[(seed + quipShift) % pool.length];
-    $('#tag').textContent = state !== realState ? 'Preview: ' + (state === 'mat' ? 'Matthews leads' : (state === 'mcd' ? 'McDavid leads' : 'All square')) : state === 'mat' ? 'Matthews leads by ' + margin + ' ' + unit :
-      (state === 'mcd' ? 'McDavid leads by ' + margin + ' ' + unit : 'All square at ' + sm.g + ' goals');
+    $('#tag').textContent = state === 'mat' ? n1 + ' leads by ' + margin + ' ' + unit : (state === 'mcd' ? n2 + ' leads by ' + margin + ' ' + unit : 'All square at ' + sm.g + ' goals');
     var again = $('#again');
     again.textContent = state === 'mcd' ? 'Another excuse' : 'Another quip';
 
@@ -1127,8 +1360,11 @@ body{overflow-x:hidden;overflow-x:clip}
     $('#cards').innerHTML = card(mat, sm, 'mat', state === 'mat', top, maxN) + card(mcd, sc, 'mcd', state === 'mcd', top, maxN);
     celebrate(mat, mcd, sm.g + liveGoals(mat), sc.g + liveGoals(mcd), state === 'mat' && lastState !== 'mat');
     $('#facts').innerHTML = factsHtml(mat, mcd, sm, sc);
+    fitBadges();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitBadges);
+    setCtrlWidth();
     renderRecap(mat, mcd);
-    if (state === 'mat' && lastState !== 'mat' && !(lastState === null && autoReloaded)) requestAnimationFrame(burst);
+    if (state === 'mat' && lastState !== 'mat') requestAnimationFrame(burst);
     lastState = state;
     $('#race').innerHTML = '<h2>The race: ' + metric + ' by games played</h2><p class="sub">Each line climbs one step per game, so a player with fewer games stops earlier.</p>' + raceChart(matSeries, mcdSeries, k, top, maxN);
 
@@ -1150,6 +1386,32 @@ body{overflow-x:hidden;overflow-x:clip}
   }
 
   $('#again').addEventListener('click', function(){ quipShift++; render(); });
+  function setCtrlWidth(){
+    var c = $('.ctrls');
+    if (c) document.documentElement.style.setProperty('--ctrlw', Math.ceil(c.getBoundingClientRect().width) + 'px');
+  }
+  function resetSeen(){ seen = null; lastState = null; }
+  function refreshCustom(){
+    custom.forEach(function(pl, i){
+      if (pl && window.Pick) window.Pick.loadPlayer(pl.nhlId).then(function(np){ custom[i] = np; render(); }, function(){});
+    });
+  }
+  if (HOSTED && window.Pick){
+    $('#pickbtn').hidden = false;
+    $('#navlink').hidden = false;
+    var SLOT_KEYS = ['s1', 's2'], sv = window.Pick.saved();
+    SLOT_KEYS.forEach(function(k, i){
+      if (sv[k] && sv[k].id) window.Pick.loadPlayer(sv[k].id).then(function(pl){ custom[i] = pl; resetSeen(); render(); }, function(){});
+    });
+    $('#pickbtn').addEventListener('click', function(){
+      window.Pick.open({
+        title:'Choose the two players',
+        slots:[{ key:'s1', label:'Player 1 (blue)', def:'Auston Matthews' }, { key:'s2', label:'Player 2 (orange)', def:'Connor McDavid' }],
+        onChange:function(key, pl){ custom[SLOT_KEYS.indexOf(key)] = pl; resetSeen(); render(); }
+      });
+    });
+    setInterval(refreshCustom, 10 * 60 * 1000);
+  }
   applyTv();
   $('#tvbtn').addEventListener('click', function(){
     tvOn = !tvOn;
