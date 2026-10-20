@@ -1,6 +1,6 @@
 {
  "season": "20262027",
- "updatedAt": "2026-10-20T22:55:28Z",
+ "updatedAt": "2026-10-20T23:18:28Z",
  "players": [
   {
    "id": "matthews",
@@ -95,7 +95,7 @@
     {
      "id": 2026020145,
      "s": "2026-10-20T23:00:00Z",
-     "st": "PRE",
+     "st": "LIVE",
      "o": "CBJ",
      "h": false
     },
@@ -120,7 +120,21 @@
      "o": "CGY",
      "h": false
     }
-   ]
+   ],
+   "live": {
+    "id": 2026020145,
+    "st": "LIVE",
+    "o": "CBJ",
+    "h": false,
+    "per": 1,
+    "pt": "REG",
+    "clk": "14:19",
+    "intm": false,
+    "fs": 0,
+    "as": 1,
+    "g": 0,
+    "a": 0
+   }
   },
   {
    "id": "mcdavid",
