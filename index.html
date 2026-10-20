@@ -316,6 +316,54 @@ table.log{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeri
   @keyframes shatter{0%,88%,100%{clip-path:none;text-shadow:2px 0 rgba(168,50,31,.55),-2px 1px rgba(60,160,120,.35)}89%{clip-path:inset(0 0 55% 0);text-shadow:-5px 0 rgba(168,50,31,.7),4px 0 rgba(60,160,120,.5)}90%{clip-path:inset(45% 0 0 0);text-shadow:5px 0 rgba(168,50,31,.7),-4px 0 rgba(60,160,120,.5)}91%{clip-path:none}}
 }
 
+
+/* ===== Extras: badges, tonight / live tag, facts strip, recap bar, goal toast ===== */
+.bdgs{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.bdg{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-display);font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;line-height:1.2;padding:3px 10px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.bdg svg{width:14px;height:14px;flex:none}
+.bdg.tonight{color:var(--good);background:var(--good-soft);border-color:transparent}
+.bdg.next{color:var(--muted)}
+.bdg.live{color:#fff;background:#c4262e;border-color:#c4262e}
+.bdg.live::before{content:"";width:8px;height:8px;border-radius:50%;background:#fff;flex:none}
+.bdg.hot{color:#ffa142;border-color:color-mix(in srgb,#ffa142 45%,transparent);background:color-mix(in srgb,#ff7a1a 14%,transparent)}
+.bdg.cold{color:#86d6ff;border-color:color-mix(in srgb,#86d6ff 45%,transparent);background:color-mix(in srgb,#86d6ff 12%,transparent)}
+.bdg.gold{color:#2a1d00;background:linear-gradient(180deg,#fff3b0,#f2c94c);border-color:#b8861b}
+.glow .bdgs{padding-right:70px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:0}
+.fact{border:1px solid var(--line);border-radius:7px;padding:9px 12px 8px;background:var(--surface);min-width:0}
+.fact dt{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.fact dd{margin:2px 0 0;font-family:var(--font-display);font-weight:700;font-size:30px;line-height:1.05;font-variant-numeric:tabular-nums;white-space:nowrap}
+.fact .fsub{display:block;font-family:var(--font-body);font-weight:400;font-size:12px;color:var(--muted);letter-spacing:0;white-space:normal;margin-top:2px}
+.fm{color:var(--mat)}
+.fc{color:var(--mcd)}
+.fd{color:var(--muted);font-weight:600}
+.bar{display:flex;align-items:center;gap:14px;min-width:0}
+.recap{flex:1;min-width:0;overflow:hidden;font-size:13px;color:var(--muted);border:1px solid var(--line);border-radius:8px;padding:8px 12px;background:var(--surface)}
+.rcopy{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 20px}
+.rcopy .lbl{font-family:var(--font-display);font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
+.rcopy b{color:var(--ink);font-weight:700}
+.rcopy b.rm{color:var(--mat)}
+.rcopy b.rc{color:var(--mcd)}
+.rtrack{display:block}
+.rtrack.run{display:inline-flex;white-space:nowrap}
+.rtrack.run .rcopy{flex-wrap:nowrap;white-space:nowrap;padding-right:3em;gap:0 3em}
+#toast{position:fixed;left:50%;top:7vh;z-index:70;max-width:min(92vw,980px);text-align:center;padding:14px 30px 16px;border-radius:14px;opacity:0;transform:translate(-50%,-24px) scale(.96);pointer-events:none;transition:opacity .35s ease,transform .35s ease;box-shadow:0 12px 40px rgba(0,0,0,.55)}
+#toast.show{opacity:1;transform:translate(-50%,0) scale(1)}
+#toast.mat{background:linear-gradient(180deg,#fff3b0,#f2c94c 55%,#b8861b);color:#241a00;border:2px solid #fff1a8}
+#toast.mcd{background:#4a2410;color:#ffd7bd;border:2px solid var(--mcd)}
+#toast .t1{font-family:var(--font-display);font-weight:700;font-size:clamp(26px,5.2vh,58px);line-height:1.05;letter-spacing:.05em;text-transform:uppercase}
+#toast .t2{font-size:clamp(14px,2.3vh,24px);margin-top:4px;font-weight:600}
+@media (prefers-reduced-motion:no-preference){
+  .bdg.live::before{animation:livepulse 1.1s ease-in-out infinite}
+  .bdg.tonight{animation:tonightpulse 2.4s ease-in-out infinite}
+  .bdg.hot svg{animation:flicker2 1.3s ease-in-out infinite;transform-origin:50% 90%}
+  .rtrack.run{animation:ticker var(--dur,40s) linear infinite}
+  @keyframes livepulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
+  @keyframes tonightpulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--good) 55%,transparent)}50%{box-shadow:0 0 0 6px transparent}}
+  @keyframes flicker2{0%,100%{transform:scale(1) rotate(-3deg)}50%{transform:scale(1.18,1.08) rotate(3deg)}}
+  @keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+}
+
 /* Race to 50: Matthews' goals, the principal bet */
 .track{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:14px;min-width:0}
 .track-top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:6px 16px}
@@ -368,12 +416,12 @@ body{overflow-x:hidden;overflow-x:clip}
   html.tv .banner .ghost{display:none}
   html.tv .tag{font-size:clamp(12px,1.9vh,22px)}
   html.tv .quip{font-size:clamp(20px,4vh,54px);max-width:none}
-  html.tv .track{padding:1.5vh 1.4vw;gap:1.1vh}
+  html.tv .track{padding:1.1vh 1.4vw;gap:.9vh}
   html.tv .track h2{font-size:clamp(22px,4vh,48px)}
   html.tv .track .sub,html.tv .track .note{display:none}
   html.tv .track .big{font-size:clamp(30px,5.6vh,72px)}
   html.tv .track .big small{font-size:.5em}
-  html.tv .meter-wrap{padding-top:2.2vh}
+  html.tv .meter-wrap{padding-top:1.9vh}
   html.tv .meter{height:clamp(12px,2.2vh,28px)}
   html.tv .pill{font-size:clamp(14px,2.2vh,26px)}
   html.tv .verdict p{font-size:clamp(12px,1.8vh,20px);flex-basis:180px}
@@ -381,14 +429,14 @@ body{overflow-x:hidden;overflow-x:clip}
   html.tv .track .stat{padding:.6vh .7vw}
   html.tv .track .stat dt{font-size:clamp(8px,1.2vh,13px);letter-spacing:.06em}
   html.tv .track .stat dd{font-size:clamp(18px,3.4vh,44px)}
-  html.tv #cards{gap:1.5vw;min-height:0;margin-top:2.2vh}
+  html.tv #cards{gap:1.5vw;min-height:0}
   html.tv .card{padding:1.5vh 1.4vw;gap:1.2vh;min-height:0}
   html.tv .card.stench{padding-top:calc(1.5vh + 22px)}
   html.tv .card.glow{padding-top:calc(1.5vh + 16px)}
   html.tv .card.glow h2,html.tv .card.stench h2{font-size:clamp(20px,min(3.9vh,2.6vw),50px)}
   html.tv .crown{width:clamp(64px,10.5vh,116px);top:calc(-1 * clamp(32px,5.8vh,62px))}
   html.tv .hat{width:clamp(66px,11vh,118px);top:calc(-1 * clamp(34px,6.6vh,66px))}
-  html.tv #cards{margin-top:clamp(18px,3.2vh,40px)}
+  html.tv #cards{margin-top:clamp(16px,3vh,38px)}
   html.tv .card h2{font-size:clamp(24px,4.6vh,60px)}
   html.tv .card .sub{font-size:clamp(11px,1.6vh,18px)}
   html.tv .chip{font-size:clamp(11px,1.6vh,18px)}
@@ -401,21 +449,33 @@ body{overflow-x:hidden;overflow-x:clip}
   html.tv .card > div:nth-last-child(2) svg{flex:1 1 0;min-height:0;width:100%;height:100%}
   html.tv .card > div:last-child{display:none}
   html.tv .race,html.tv .foot{display:none}
-  html.tv .stamp{display:block;position:fixed;left:max(1.5vw,16px);bottom:.9vh;margin:0;font-size:clamp(11px,1.5vh,18px);color:var(--muted)}
+  html.tv .bar{position:fixed;left:max(1.5vw,16px);right:calc(max(1.5vw,16px) + clamp(112px,10vw,150px) + 14px);bottom:.7vh;z-index:4;gap:1.4vw}
+  html.tv .stamp{display:block;position:static;flex:none;white-space:nowrap;margin:0;font-size:clamp(11px,1.5vh,18px);color:var(--muted)}
+  html.tv .recap{border:0;background:transparent;padding:0;font-size:clamp(11px,1.6vh,19px);-webkit-mask-image:linear-gradient(90deg,transparent,#000 2%,#000 98%,transparent);mask-image:linear-gradient(90deg,transparent,#000 2%,#000 98%,transparent)}
+  html.tv .rcopy{flex-wrap:nowrap;white-space:nowrap}
+  html.tv .bdgs{margin-top:.6vh;gap:.4vw}
+  html.tv .bdg{font-size:clamp(10px,1.45vh,15px);padding:.2vh .7vw}
+  html.tv .bdg svg{width:clamp(11px,1.6vh,16px);height:clamp(11px,1.6vh,16px)}
+  html.tv .facts{grid-template-columns:repeat(4,minmax(0,1fr));gap:1vw}
+  html.tv .fact{padding:.6vh .9vw}
+  html.tv .fact dt{font-size:clamp(8px,1.2vh,13px);letter-spacing:.08em}
+  html.tv .fact dd{font-size:clamp(18px,min(3.4vh,2.3vw),44px);margin-top:0}
+  html.tv .fact .fsub{display:none}
   html.tv .stamp.stale{color:var(--warn);font-weight:700}
 }
 /* All monitor shapes: quip banner and Race to 50 tracker each run full width, stacked, with the two player cards below */
 @media (min-width:700px) and (min-aspect-ratio:1/1){
-  html.tv .wrap{grid-template-rows:auto auto auto minmax(0,1fr)}
+  html.tv .wrap{grid-template-rows:auto auto auto auto minmax(0,1fr)}
   html.tv .top{grid-column:1/-1;grid-row:1}
-  html.tv .banner{grid-column:1/-1;grid-row:2;padding:1.4vh 1.6vw}
+  html.tv .banner{grid-column:1/-1;grid-row:2;padding:1.1vh 1.6vw}
   html.tv .quip{font-size:clamp(18px,3.4vh,44px)}
   html.tv .track{grid-column:1/-1;grid-row:3;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);column-gap:1.8vw;row-gap:1vh;align-items:center}
   html.tv .track-top{grid-column:1;grid-row:1}
   html.tv .meter-wrap{grid-column:1;grid-row:2}
   html.tv .verdict{grid-column:2;grid-row:1}
   html.tv .t-stats{grid-column:2;grid-row:2}
-  html.tv #cards{grid-column:1/-1;grid-row:4}
+  html.tv .facts{grid-column:1/-1;grid-row:4}
+  html.tv #cards{grid-column:1/-1;grid-row:5}
 }
 </style>
 </head>
@@ -440,15 +500,19 @@ body{overflow-x:hidden;overflow-x:clip}
     <button type="button" class="ghost" id="again">Another one</button>
   </section>
 
+  <dl class="facts" id="facts"></dl>
+
+  <div class="bar"><p class="stamp" id="stamp"></p><div class="recap" id="recap"></div></div>
+
   <main id="cards" class="grid"></main>
 
   <section class="race" id="race"></section>
 
   <footer class="foot" id="foot"></footer>
-  <p class="stamp" id="stamp"></p>
 </div>
 
 <div id="confetti" aria-hidden="true"></div>
+<div id="toast" role="status" aria-live="polite"></div>
 
 <script id="nhl-data" type="application/json">
 {"season":"20262027","updatedAt":"2026-10-16T18:55:00Z","players":[
@@ -665,7 +729,7 @@ body{overflow-x:hidden;overflow-x:clip}
   function burst(){
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     var host = document.getElementById('confetti');
-    var card = document.querySelector('.card.glow');
+    var card = document.querySelector('.card.glow') || document.querySelector('.card.mat');
     if (!host || !card || !host.animate) return;
     var r = card.getBoundingClientRect();
     var ox = Math.min(Math.max(r.left + r.width / 2, 40), window.innerWidth - 40);
@@ -748,6 +812,174 @@ body{overflow-x:hidden;overflow-x:clip}
   function fmtTime(sec){ var m = Math.floor(sec / 60), s = Math.round(sec % 60); if (s === 60){ m++; s = 0; } return m + ':' + (s < 10 ? '0' : '') + s; }
   function fmtDate(d){ return new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month:'short', day:'numeric' }); }
   function hash(str){ var h = 0; for (var i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) | 0; return Math.abs(h); }
+
+
+  // ===== Extras: streaks, achievements, tonight/live tag, recap, lead tracker, projections, goal toasts =====
+  var ICON_FLAME = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.5 2s.9 3.1-1.3 5.6C10.3 9.7 8 11.2 8 14.5a4.5 4.5 0 0 0 9 0c0-2.2-1.2-3.6-2.1-4.7-.2 1.2-.8 1.9-1.6 2.3.6-3.2.2-6.6.2-10.1z"/></svg>';
+  var ICON_ICE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M12 2.5v19M3.8 7.2l16.4 9.6M3.8 16.8l16.4-9.6M9.3 4.3 12 6.8l2.7-2.5M9.3 19.7 12 17.2l2.7 2.5"/></svg>';
+  var ICON_STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="m12 2 2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17l-6.1 3.4 1.5-6.8L2.2 9l6.9-.7z"/></svg>';
+  var MAT_GOAL_LINES = ['Horn! Please clap.', 'The receipts are printing.', 'The net never saw it coming.', 'Somewhere in Edmonton, a stat sheet just flinched.', 'Auston is simply built different.'];
+  var MCD_GOAL_LINES = ["Auston's lawyers have been notified.", 'A moment of silence for the lead.', 'The puck had an opinion about this.', "Matthews' stick is sweating.", 'This is a clerical error and it will be corrected.'];
+  var seen = null, quiet = false, toastTimer = null;
+
+  function daysAgo(d){ return (Date.now() - new Date(d + 'T12:00:00').getTime()) / 86400000; }
+  function ordinal(n){ return n === 1 ? '1st' : (n === 2 ? '2nd' : (n === 3 ? '3rd' : n + 'th')); }
+  function lastName(p){ return p.name.split(' ').slice(-1)[0]; }
+  function liveGoals(p){ return p.live ? (p.live.g || 0) : 0; }
+  function streaksOf(p){
+    var goal = 0, drought = 0, i;
+    for (i = p.games.length - 1; i >= 0 && p.games[i].g >= 1; i--) goal++;
+    for (i = p.games.length - 1; i >= 0 && p.games[i].g === 0; i--) drought++;
+    return { goal:goal, drought:drought };
+  }
+  function gameBadge(p){
+    var L = p.live;
+    if (L){
+      var per = L.intm ? 'INT' : (L.pt === 'SO' ? 'SO' : (L.pt === 'OT' ? 'OT' : ordinal(L.per || 1)));
+      var clock = (!L.intm && L.clk) ? ' ' + L.clk : '';
+      var night = (L.g || L.a) ? ' · ' + L.g + 'G ' + L.a + 'A tonight' : '';
+      return { cls:'live', text:'Live ' + (L.h ? 'vs ' : '@ ') + L.o + ' · ' + per + clock + ' · ' + L.fs + '–' + L.as + night };
+    }
+    var up = (p.sched || []).filter(function(g){ return g.st !== 'FINAL' && g.st !== 'OFF'; })[0];
+    if (!up) return null;
+    var d = new Date(up.s), now = new Date();
+    var time = d.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit' });
+    var vs = (up.h ? 'vs ' : '@ ') + up.o;
+    if (d.getTime() < now.getTime() - 120000) return { cls:'tonight', text:'Starting now ' + vs };
+    if (d.toDateString() === now.toDateString()) return { cls:'tonight', text:(d.getHours() < 17 ? 'Today ' : 'Tonight ') + time + ' ' + vs };
+    return { cls:'next', text:'Next ' + d.toLocaleDateString('en-US', { weekday:'short' }) + ' ' + time + ' ' + vs };
+  }
+  function badgesHtml(p, s){
+    var out = [], st = streaksOf(p), last = p.games[p.games.length - 1];
+    var gb = gameBadge(p);
+    if (gb) out.push('<span class="bdg ' + gb.cls + '">' + esc(gb.text) + '</span>');
+    if (last && daysAgo(last.d) <= 3.6){
+      if (last.g >= 3) out.push('<span class="bdg gold">' + ICON_STAR + 'Hat trick vs ' + esc(last.o) + '</span>');
+      else if (last.g === 2) out.push('<span class="bdg gold">' + ICON_STAR + '2-goal game vs ' + esc(last.o) + '</span>');
+      var before = s.g - last.g;
+      [10, 20, 30, 40, 50].forEach(function(M){
+        if (before < M && s.g >= M) out.push('<span class="bdg gold">' + ICON_STAR + 'Hit ' + M + ' goals</span>');
+      });
+    }
+    if (st.goal >= 3) out.push('<span class="bdg hot">' + ICON_FLAME + st.goal + '-game goal streak</span>');
+    else if (st.drought >= 3) out.push('<span class="bdg cold">' + ICON_ICE + 'Goalless in ' + st.drought + ' games</span>');
+    out = out.slice(0, 3);
+    return out.length ? '<div class="bdgs">' + out.join('') + '</div>' : '';
+  }
+
+  function recapWhen(d){
+    var t = new Date(d + 'T12:00:00'), now = new Date();
+    if (t.toDateString() === now.toDateString()) return 'today';
+    if (t.toDateString() === new Date(now.getTime() - 864e5).toDateString()) return 'last night';
+    return fmtDate(d);
+  }
+  function renderRecap(mat, mcd){
+    var el = $('#recap');
+    if (!el) return;
+    var items = [];
+    [[mat, 'rm'], [mcd, 'rc']].forEach(function(x){
+      var p = x[0], last = p.games[p.games.length - 1];
+      if (!last) return;
+      items.push('<span class="ritem"><b class="' + x[1] + '">' + esc(lastName(p)) + '</b> ' + recapWhen(last.d) + ' vs ' + esc(last.o) + ': <b>' + last.g + 'G ' + last.a + 'A</b> · ' + fmtTime(last.t) + ' on ice</span>');
+    });
+    [[mat, 'rm'], [mcd, 'rc']].forEach(function(x){
+      var gb = gameBadge(x[0]);
+      if (gb) items.push('<span class="ritem"><b class="' + x[1] + '">' + esc(lastName(x[0])) + '</b> ' + esc(gb.text) + '</span>');
+    });
+    var copy = '<span class="rcopy"><span class="lbl">Latest</span>' + items.join('') + '</span>';
+    el.innerHTML = '<div class="rtrack">' + copy + '</div>';
+    var tr = el.firstChild;
+    tr.className = 'rtrack';
+    if (tvOn && tr.scrollWidth > el.clientWidth + 2){
+      tr.innerHTML = copy + copy;
+      tr.className = 'rtrack run';
+      tr.style.setProperty('--dur', Math.max(24, Math.round(tr.textContent.length * .085)) + 's');
+    }
+  }
+
+  function leadStats(mat, mcd){
+    var seenDates = {};
+    mat.games.concat(mcd.games).forEach(function(x){ seenDates[x.d] = 1; });
+    var ds = Object.keys(seenDates).sort();
+    var cm = 0, cc = 0, im = 0, ic = 0, daysM = 0, daysC = 0, daysT = 0, bigM = 0, bigC = 0, changes = 0, prev = 0;
+    ds.forEach(function(d){
+      while (im < mat.games.length && mat.games[im].d <= d) cm += mat.games[im++].g;
+      while (ic < mcd.games.length && mcd.games[ic].d <= d) cc += mcd.games[ic++].g;
+      var diff = cm - cc;
+      if (diff > 0){ daysM++; bigM = Math.max(bigM, diff); }
+      else if (diff < 0){ daysC++; bigC = Math.max(bigC, -diff); }
+      else daysT++;
+      var sign = diff > 0 ? 1 : (diff < 0 ? -1 : 0);
+      if (sign !== 0){ if (prev !== 0 && sign !== prev) changes++; prev = sign; }
+    });
+    return { changes:changes, daysM:daysM, daysC:daysC, daysT:daysT, bigM:bigM, bigC:bigC, total:ds.length };
+  }
+  function factsHtml(mat, mcd, sm, sc){
+    var ls = leadStats(mat, mcd);
+    var projM = Math.round(sm.gpg * SEASON_GAMES), projC = Math.round(sc.gpg * SEASON_GAMES);
+    function pair(a, b){ return '<span class="fm">' + a + '</span> <span class="fd">&ndash;</span> <span class="fc">' + b + '</span>'; }
+    function tile(dt, dd, sub){ return '<div class="fact"><dt>' + dt + '</dt><dd>' + dd + '<span class="fsub">' + sub + '</span></dd></div>'; }
+    return tile('Lead changes', ls.changes, ls.changes === 1 ? 'time the lead has flipped' : 'times the lead has flipped') +
+      tile('Game days in front', pair(ls.daysM, ls.daysC), 'Matthews &ndash; McDavid' + (ls.daysT ? ' (' + ls.daysT + ' tied)' : '')) +
+      tile('Biggest lead', pair(ls.bigM, ls.bigC), 'in goals, Matthews &ndash; McDavid') +
+      tile('Projected finish', pair(projM, projC), 'goals over 82 games, Matthews &ndash; McDavid');
+  }
+
+  function dynamicQuips(state, c){
+    var q = [], s = c.margin === 1 ? '' : 's', left = SEASON_GAMES - c.sm.gp;
+    var tonightM = gameBadge(c.mat), tonightC = gameBadge(c.mcd);
+    if (state === 'mat'){
+      q.push('Matthews has ' + c.sm.g + '. Connor has ' + c.sc.g + '. Math is just mean like that.');
+      if (c.margin >= 2) q.push(c.margin + ' goals clear. Connor needs to find the net, and maybe a map.');
+      if (c.stM.goal >= 3) q.push('Auston has scored in ' + c.stM.goal + ' straight games. Connor is still looking for the on switch.');
+      if (c.stC.drought >= 2) q.push('Connor is ' + c.stC.drought + ' games without a goal. Thoughts and prayers, mostly just thoughts.');
+      q.push('At this pace Auston finishes with ' + c.projM + ' goals. Connor finishes with ' + c.projC + '. Just saying.');
+      if (c.sm.gp <= c.sc.gp) q.push('Auston got there in ' + c.sm.gp + ' games. Connor needed ' + c.sc.gp + '.');
+      q.push('Auston is scoring ' + c.sm.gpg.toFixed(2) + ' a game. Connor is scoring ' + c.sc.gpg.toFixed(2) + '. Somebody check the thermostat in Edmonton.');
+      if (c.lastM && c.lastM.g >= 1 && daysAgo(c.lastM.d) <= 2.6) q.push('Auston scored against ' + c.lastM.o + ' last time out. ' + c.lastM.o + ' has been notified.');
+      if (tonightM && tonightM.cls !== 'next') q.push('Auston plays tonight. Connor, please do something dramatic about it.');
+      if (tonightC && tonightC.cls !== 'next') q.push("Connor plays tonight. Auston's lead is already nervously hydrating.");
+    } else if (state === 'mcd'){
+      q.push('Connor has ' + c.sc.g + '. Auston has ' + c.sm.g + ', and a very detailed list of reasons why.');
+      if (c.margin >= 2) q.push('Connor is ' + c.margin + ' goals up. Statisticians call this temporary and meaningless.');
+      if (c.stM.drought >= 2) q.push('Auston is ' + c.stM.drought + ' games without a goal. The puck is just being shy.');
+      q.push('At this pace Auston still projects to ' + c.projM + '. That is a lot of trust the process.');
+      if (c.stC.goal >= 3) q.push('Connor has scored in ' + c.stC.goal + ' straight. It is a clerical error and it is being investigated.');
+      q.push('Auston is only ' + c.margin + ' goal' + s + ' back with ' + left + ' games to go. Panic is for amateurs and Connor.');
+      q.push('Connor is scoring ' + c.sc.gpg.toFixed(2) + ' a game. Auston is scoring ' + c.sm.gpg.toFixed(2) + '. A stat sheet just cleared its throat.');
+      if (tonightM && tonightM.cls !== 'next') q.push('Auston plays tonight. History says he cannot be stopped. History is also just a rumor.');
+    }
+    return q;
+  }
+
+  function toast(kind, t1, t2){
+    var el = $('#toast');
+    if (!el) return;
+    el.className = kind;
+    el.innerHTML = '<div class="t1">' + esc(t1) + '</div>' + (t2 ? '<div class="t2">' + esc(t2) + '</div>' : '');
+    void el.offsetWidth;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 9000);
+  }
+  function celebrate(mat, mcd, effM, effC, burstAlready){
+    if (quiet || !seen){ seen = { m:effM, c:effC }; quiet = false; return; }
+    var gm = effM > seen.m, gc = effC > seen.c;
+    if (!gm && !gc){ return; }
+    var before = Math.sign(seen.m - seen.c), after = Math.sign(effM - effC);
+    var lead = '';
+    if (after !== before){ lead = after > 0 ? ' Matthews takes the lead!' : (after < 0 ? ' McDavid takes the lead.' : ' All square!'); }
+    var pick = function(a){ return a[Math.floor(Math.random() * a.length)]; };
+    if (gm){
+      var hat = (mat.live && mat.live.g >= 3);
+      toast('mat', (hat ? 'Hat trick! ' : '') + 'Matthews scores!', 'Auston now has ' + effM + (effM === 1 ? ' goal.' : ' goals.') + lead + (gc ? ' Connor scored too (' + effC + ').' : ' ' + pick(MAT_GOAL_LINES)));
+      if (!burstAlready) requestAnimationFrame(burst);
+    } else {
+      toast('mcd', 'McDavid scores', 'Connor now has ' + effC + (effC === 1 ? ' goal.' : ' goals.') + lead + ' ' + pick(MCD_GOAL_LINES));
+    }
+    seen.m = Math.max(seen.m, effM);
+    seen.c = Math.max(seen.c, effC);
+  }
 
   function summarize(p){
     var s = { gp:p.games.length, g:0, a:0, p:0, t:0 };
@@ -844,7 +1076,7 @@ body{overflow-x:hidden;overflow-x:clip}
       return '<tr><td>' + fmtDate(x.d) + '</td><td>' + esc(x.o) + '</td><td>' + x.g + '</td><td>' + x.a + '</td><td>' + x.p + '</td><td>' + fmtTime(x.t) + '</td></tr>';
     }).join('');
     return '<article class="card ' + cls + (isLead ? (cls === 'mat' ? ' glow' : ' stench') : (cls === 'mcd' && curState === 'mat' ? ' trail' : '')) + '">' + (isLead ? aura() + (cls === 'mat' ? PENNANT + CROWN : DECAY + HAT) : '') +
-      '<div class="card-head"><div><h2>' + esc(p.name) + '</h2><p class="sub">' + esc(p.team) + ' &middot; #' + esc(p.num) + ' &middot; ' + esc(p.pos) + '</p></div>' +
+      '<div class="card-head"><div><h2>' + esc(p.name) + '</h2><p class="sub">' + esc(p.team) + ' &middot; #' + esc(p.num) + ' &middot; ' + esc(p.pos) + '</p>' + badgesHtml(p, s) + '</div>' +
       (isLead && cls === 'mcd' ? '<span class="chip">Leads. For now.</span>' : '') + '</div>' +
       '<dl class="stats">' + tiles + '</dl>' +
       '<div><p class="block-title">Season ' + metric + ', game by game</p>' + spark(cumulative(p, k), topY, maxN, cls) + '</div>' +
@@ -874,7 +1106,12 @@ body{overflow-x:hidden;overflow-x:clip}
     banner.className = 'banner is-' + state;
     var list = state === 'mat' ? MAT_LEADS : (state === 'mcd' ? MCD_EXCUSES : TIES);
     var seed = hash((DATA.updatedAt || '').slice(0, 10) + 'goals' + state);
-    $('#quip').textContent = list[(seed + quipShift) % list.length];
+    var ctx = { mat:mat, mcd:mcd, sm:sm, sc:sc, margin:margin, stM:streaksOf(mat), stC:streaksOf(mcd),
+      projM:Math.round(sm.gpg * SEASON_GAMES), projC:Math.round(sc.gpg * SEASON_GAMES),
+      lastM:mat.games[mat.games.length - 1] };
+    var pool = list.slice();
+    dynamicQuips(state, ctx).forEach(function(qq){ pool.push(qq, qq, qq); });
+    $('#quip').textContent = pool[(seed + quipShift) % pool.length];
     $('#tag').textContent = state !== realState ? 'Preview: ' + (state === 'mat' ? 'Matthews leads' : (state === 'mcd' ? 'McDavid leads' : 'All square')) : state === 'mat' ? 'Matthews leads by ' + margin + ' ' + unit :
       (state === 'mcd' ? 'McDavid leads by ' + margin + ' ' + unit : 'All square at ' + sm.g + ' goals');
     var again = $('#again');
@@ -885,6 +1122,9 @@ body{overflow-x:hidden;overflow-x:clip}
     var top = niceMax(Math.max(sm[k], sc[k]));
     curState = state;
     $('#cards').innerHTML = card(mat, sm, 'mat', state === 'mat', top, maxN) + card(mcd, sc, 'mcd', state === 'mcd', top, maxN);
+    celebrate(mat, mcd, sm.g + liveGoals(mat), sc.g + liveGoals(mcd), state === 'mat' && lastState !== 'mat');
+    $('#facts').innerHTML = factsHtml(mat, mcd, sm, sc);
+    renderRecap(mat, mcd);
     if (state === 'mat' && lastState !== 'mat' && !(lastState === null && autoReloaded)) requestAnimationFrame(burst);
     lastState = state;
     $('#race').innerHTML = '<h2>The race: ' + metric + ' by games played</h2><p class="sub">Each line climbs one step per game, so a player with fewer games stops earlier.</p>' + raceChart(matSeries, mcdSeries, k, top, maxN);
@@ -919,13 +1159,13 @@ body{overflow-x:hidden;overflow-x:clip}
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function(){ if (tvOn) render(); }, 200);
   });
-  render();
+  var started = false;
   // Hosted version: pull fresh numbers from data.json (updated by the scheduled GitHub job),
   // keep the screen awake where the browser allows it, and reload the page every few hours to pick up site changes.
-  var lastRaw = '';
+  var lastRaw = '', firstLoad = true;
   function load(){
-    if (!window.fetch) return;
-    fetch('data.json?_=' + Date.now(), { cache:'no-store' })
+    if (!window.fetch) return null;
+    return fetch('data.json?_=' + Date.now(), { cache:'no-store' })
       .then(function(r){ return r.ok ? r.text() : null; })
       .then(function(txt){
         if (!txt || txt === lastRaw) return;
@@ -933,12 +1173,31 @@ body{overflow-x:hidden;overflow-x:clip}
         if (!j || !j.players || j.players.length < 2) return;
         lastRaw = txt;
         DATA = j;
+        // The first fresh numbers are the starting point, not a goal, so no celebration for them.
+        if (started){ if (firstLoad) quiet = true; } else { started = true; }
+        firstLoad = false;
         render();
       })
       .catch(function(){});
   }
-  load();
-  setInterval(load, 10 * 60 * 1000);
+  // Check every 10 minutes normally, and every 90 seconds around game time so live scores feel live.
+  function pollDelay(){
+    var now = Date.now(), fast = false;
+    ((DATA && DATA.players) || []).forEach(function(p){
+      if (p.live) fast = true;
+      (p.sched || []).forEach(function(g){
+        var s = new Date(g.s).getTime();
+        if (now >= s - 30 * 60000 && now <= s + 6 * 3600000) fast = true;
+      });
+    });
+    return fast ? 90 * 1000 : 10 * 60 * 1000;
+  }
+  function loop(){
+    var again = function(){ setTimeout(loop, pollDelay()); };
+    var pr = load();
+    if (pr && pr.then) pr.then(again, again); else again();
+  }
+  loop();
   setInterval(function(){
     try { sessionStorage.setItem('autoreload', '1'); } catch (e) {}
     location.reload();
@@ -952,6 +1211,8 @@ body{overflow-x:hidden;overflow-x:clip}
   }
   keepAwake();
   document.addEventListener('visibilitychange', keepAwake);
+  // Wait briefly for the fresh numbers so the page never flashes stale ones; fall back to the built-in copy if the fetch is slow.
+  setTimeout(function(){ if (!started){ started = true; render(); } }, 2500);
 })();
 </script>
 </body>
