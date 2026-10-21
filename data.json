@@ -1,6 +1,6 @@
 {
  "season": "20262027",
- "updatedAt": "2026-10-21T03:37:58Z",
+ "updatedAt": "2026-10-21T04:12:17Z",
  "players": [
   {
    "id": "matthews",
@@ -207,7 +207,7 @@
     {
      "id": 2026020148,
      "s": "2026-10-21T01:00:00Z",
-     "st": "CRIT",
+     "st": "FINAL",
      "o": "MIN",
      "h": true
     },
@@ -232,21 +232,7 @@
      "o": "DET",
      "h": true
     }
-   ],
-   "live": {
-    "id": 2026020148,
-    "st": "CRIT",
-    "o": "MIN",
-    "h": true,
-    "per": 3,
-    "pt": "REG",
-    "clk": "03:58",
-    "intm": false,
-    "fs": 3,
-    "as": 3,
-    "g": 0,
-    "a": 2
-   }
+   ]
   }
  ]
 }
