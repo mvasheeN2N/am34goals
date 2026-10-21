@@ -616,13 +616,29 @@ dialog#pickdlg::backdrop{background:rgba(3,8,14,.72)}
   var SEARCH = 'https://search.d3.nhle.com/api/v1/search/player?culture=en-us&limit=10&active=true&q=';
   var KEY = 'players-v1';
 
-  function getJson(url){
+  function getJson(url, tries){
+    tries = tries || 4;
     // Plain request on purpose: extra cache headers would force a CORS pre-check that the NHL server may refuse.
     var what = url.indexOf('search.d3') > -1 ? 'player search' : (url.indexOf('landing') > -1 ? 'player profile' : (url.indexOf('game-log') > -1 ? 'game log' : 'schedule'));
+    var tag = ' [v4 ' + url.replace(NHL, '').replace(/^https:\/\/search.*/, 'search') + ']';
     return fetch(url).then(function(r){
-      if (!r.ok) throw new Error('The NHL ' + what + ' answered with an error (' + r.status + ').');
+      if (!r.ok){
+        var err = new Error('The NHL ' + what + ' answered with an error (' + r.status + ').' + tag);
+        err.http = r.status;
+        throw err;
+      }
       return r.json();
-    }, function(e){ throw new Error('Could not reach the NHL ' + what + ' from this browser (blocked or offline). [v3 ' + url.replace(NHL, '').replace(/^https:\/\/search.*/, 'search') + ']'); });
+    }, function(){
+      var err = new Error('Could not reach the NHL ' + what + ' from this browser (blocked or offline).' + tag);
+      err.net = true;
+      throw err;
+    }).catch(function(err){
+      // The NHL feed sometimes drops a request; try again a few times before giving up.
+      if (tries > 1 && (err.net || err.http >= 429)){
+        return new Promise(function(res){ setTimeout(res, 700); }).then(function(){ return getJson(url, tries - 1); });
+      }
+      throw err;
+    });
   }
   function toSeconds(t){
     var p = String(t || '0:00').split(':').map(Number);
