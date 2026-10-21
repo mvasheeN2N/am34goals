@@ -501,6 +501,9 @@ body{overflow-x:hidden;overflow-x:clip}
 .meta .pn{font-family:var(--font-display);font-weight:700;font-size:24px;line-height:1.05;color:var(--mat);white-space:nowrap}
 .meta .pt{color:var(--muted);font-size:13px;white-space:nowrap}
 .meta .gm{margin-top:0}
+.chg{font:inherit;font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);background:var(--surface);border:1px solid var(--mat);border-radius:999px;padding:0 12px;min-height:30px;cursor:pointer;white-space:nowrap;flex:none}
+.chg:hover{background:var(--mat-soft)}
+.chg:focus-visible{outline:2px solid var(--mat);outline-offset:2px}
 .track{--glowc:color-mix(in srgb,var(--gold) 40%,transparent)}
 .track.done{border-color:var(--gold);box-shadow:inset 0 0 28px var(--glowc)}
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;min-width:0}
@@ -532,6 +535,7 @@ ol.miles li.prj .m{color:var(--muted)}
   html.tv .facts{grid-template-columns:repeat(6,minmax(0,1fr))}
   html.tv .meta .pn{font-size:clamp(14px,2.6vh,30px)}
   html.tv .meta .pt{font-size:clamp(10px,1.5vh,16px)}
+  html.tv .chg{min-height:clamp(20px,3vh,32px);font-size:clamp(9px,1.4vh,14px);padding:0 .9vw}
   html.tv #pace{grid-column:1;grid-row:5}
   html.tv #miles{grid-column:2;grid-row:5}
   html.tv .panel{padding:1.2vh 1.2vw;gap:.6vh;min-height:0}
@@ -575,7 +579,6 @@ dialog#pickdlg::backdrop{background:rgba(3,8,14,.72)}
     </div>
     <div class="ctrls">
       <a class="mon" id="navlink" href="index.html" hidden>Back to the showdown</a>
-      <button type="button" class="mon" id="pickbtn" hidden>Player</button>
       <button type="button" class="mon" id="tvbtn" aria-pressed="false">Monitor view</button>
     </div>
   </header>
@@ -1148,7 +1151,7 @@ dialog#pickdlg::backdrop{background:rgba(3,8,14,.72)}
     document.title = possessive(N) + ' drive for 50';
     var gb = gameBadge(p);
     gameRowOn = !!gb;
-    $('#meta').innerHTML = '<div class="nm"><strong class="pn">' + esc(p.name) + '</strong><span class="pt">' + esc([p.abbr, p.pos, p.num ? '#' + p.num : ''].filter(Boolean).join(' · ')) + '</span>' + highlightHtml(p, s) + '</div>' + (gb ? gameRowHtml(p) : '');
+    $('#meta').innerHTML = '<div class="nm"><strong class="pn">' + esc(p.name) + '</strong>' + (HOSTED && window.Pick ? '<button type="button" class="chg" id="pickbtn">Change Player</button>' : '') + '<span class="pt">' + esc([p.abbr, p.pos, p.num ? '#' + p.num : ''].filter(Boolean).join(' · ')) + '</span>' + highlightHtml(p, s) + '</div>' + (gb ? gameRowHtml(p) : '');
     renderTrack(s, p);
     $('#track').className = 'track' + (state === 'done' ? ' done' : '');
 
@@ -1204,11 +1207,11 @@ dialog#pickdlg::backdrop{background:rgba(3,8,14,.72)}
     if (c) document.documentElement.style.setProperty('--ctrlw', Math.ceil(c.getBoundingClientRect().width) + 'px');
   }
   if (HOSTED && window.Pick){
-    $('#pickbtn').hidden = false;
     $('#navlink').hidden = false;
     var sv = window.Pick.saved();
     if (sv.d1 && sv.d1.id){ custom = { nhlId:sv.d1.id, name:sv.d1.name }; window.Pick.loadPlayer(sv.d1.id).then(function(pl){ custom = pl; seen = null; render(); }, function(){}); }
-    $('#pickbtn').addEventListener('click', function(){
+    $('#meta').addEventListener('click', function(ev){
+      if (!ev.target.closest || !ev.target.closest('#pickbtn')) return;
       window.Pick.open({
         title:'Choose the player to follow',
         extras:function(){ return DATA.extras || []; },
