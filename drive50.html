@@ -617,10 +617,12 @@ dialog#pickdlg::backdrop{background:rgba(3,8,14,.72)}
   var KEY = 'players-v1';
 
   function getJson(url){
-    return fetch(url, { cache:'no-store' }).then(function(r){
-      if (!r.ok) throw new Error('The NHL answered with an error (' + r.status + ').');
+    // Plain request on purpose: extra cache headers would force a CORS pre-check that the NHL server may refuse.
+    var what = url.indexOf('search.d3') > -1 ? 'player search' : (url.indexOf('landing') > -1 ? 'player profile' : (url.indexOf('game-log') > -1 ? 'game log' : 'schedule'));
+    return fetch(url).then(function(r){
+      if (!r.ok) throw new Error('The NHL ' + what + ' answered with an error (' + r.status + ').');
       return r.json();
-    });
+    }, function(){ throw new Error('Could not reach the NHL ' + what + ' from this browser (blocked or offline).'); });
   }
   function toSeconds(t){
     var p = String(t || '0:00').split(':').map(Number);
