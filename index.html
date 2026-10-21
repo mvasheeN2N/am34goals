@@ -7,7 +7,7 @@
 <meta name="description" content="Season stats, goals race and the race to 50.">
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data:; connect-src 'self' https://api-web.nhle.com https://search.d3.nhle.com; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data:; connect-src 'self' https://*.workers.dev https://api-web.nhle.com https://search.d3.nhle.com; base-uri 'none'; form-action 'none'">
 <link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -505,6 +505,7 @@ dialog#pickdlg::backdrop{background:rgba(3,8,14,.72)}
 .pk-res button:focus-visible,.pk-btn:focus-visible,.pk-slot input:focus-visible{outline:2px solid var(--mat);outline-offset:2px}
 .pk-res .pk-sub{color:var(--muted);font-size:13px;margin-left:6px}
 .pk-reset{margin-top:8px;color:var(--muted)}
+.pk-sub2{margin:10px 0 6px;color:var(--muted);font-size:13px}
 .pk-msg{min-height:1.5em;margin:4px 0 10px;color:var(--muted);font-size:13px}
 .pk-msg.err{color:var(--bad)}
 
@@ -562,12 +563,22 @@ dialog#pickdlg::backdrop{background:rgba(3,8,14,.72)}
   var SEARCH = 'https://search.d3.nhle.com/api/v1/search/player?culture=en-us&limit=10&active=true&q=';
   var KEY = 'players-v1';
 
+  // If config.json names a relay (a Cloudflare Worker), all NHL requests go through it.
+  var PROXY = '';
+  var proxyReady = (window.fetch ? fetch('config.json').then(function(r){ return r.ok ? r.json() : {}; }).then(function(j){
+    PROXY = ((j && j.proxy) || '').replace(/\/+$/, '');
+    if (/YOUR-WORKER/.test(PROXY)) PROXY = '';
+  }).catch(function(){}) : Promise.resolve());
+  function viaProxy(url){
+    if (!PROXY) return url;
+    return url.replace(NHL, PROXY + '/v1/').replace('https://search.d3.nhle.com/api/v1/search/player?culture=en-us&limit=10&active=true&q=', PROXY + '/search?q=');
+  }
   function getJson(url, tries){
     tries = tries || 4;
     // Plain request on purpose: extra cache headers would force a CORS pre-check that the NHL server may refuse.
     var what = url.indexOf('search.d3') > -1 ? 'player search' : (url.indexOf('landing') > -1 ? 'player profile' : (url.indexOf('game-log') > -1 ? 'game log' : 'schedule'));
-    var tag = ' [v4 ' + url.replace(NHL, '').replace(/^https:\/\/search.*/, 'search') + ']';
-    return fetch(url).then(function(r){
+    var tag = ' [v5 ' + url.replace(NHL, '').replace(/^https:\/\/search.*/, 'search') + ']';
+    return proxyReady.then(function(){ return fetch(viaProxy(url)); }).then(function(r){
       if (!r.ok){
         var err = new Error('The NHL ' + what + ' answered with an error (' + r.status + ').' + tag);
         err.http = r.status;
@@ -663,7 +674,25 @@ dialog#pickdlg::backdrop{background:rgba(3,8,14,.72)}
       var input = document.createElement('input'); input.type = 'search'; input.placeholder = 'Search any NHL skater, e.g. MacKinnon'; input.setAttribute('aria-label', 'Search for a player: ' + slot.label); input.autocomplete = 'off';
       var list = document.createElement('ul'); list.className = 'pk-res';
       var reset = document.createElement('button'); reset.type = 'button'; reset.className = 'pk-btn pk-reset'; reset.textContent = 'Go back to ' + slot.def;
-      sec.appendChild(h3); sec.appendChild(cur); sec.appendChild(input); sec.appendChild(list); sec.appendChild(reset);
+      var extras = (cfg.extras && cfg.extras()) || [];
+      var wl = document.createElement('div');
+      var wlh = document.createElement('p'); wlh.className = 'pk-sub2';
+      wlh.textContent = extras.length ? 'Pick from your watchlist:' : 'Your watchlist is empty. Add player names to watchlist.txt on GitHub and they will appear here within about 10 minutes.';
+      wl.appendChild(wlh);
+      var wul = document.createElement('ul'); wul.className = 'pk-res';
+      extras.forEach(function(e){
+        var li = document.createElement('li'), b = document.createElement('button'), sub = document.createElement('span');
+        b.type = 'button'; b.textContent = e.name; sub.className = 'pk-sub'; sub.textContent = [e.abbr, e.pos, e.num ? '#' + e.num : ''].filter(Boolean).join(' \u00b7 ');
+        b.appendChild(sub); li.appendChild(b); wul.appendChild(li);
+        b.addEventListener('click', function(){
+          var s = saved(); s[slot.key] = { id:e.nhlId, name:e.name }; save(s);
+          showCur(); say('Switched to ' + e.name + '.');
+          cfg.onChange(slot.key, e);
+        });
+      });
+      wl.appendChild(wul);
+      var lh = document.createElement('p'); lh.className = 'pk-sub2'; lh.textContent = 'Or try a live search (only works if your browser can reach the NHL directly):';
+      sec.appendChild(h3); sec.appendChild(cur); sec.appendChild(wl); sec.appendChild(lh); sec.appendChild(input); sec.appendChild(list); sec.appendChild(reset);
       body.appendChild(sec);
       var timer = null, ticket = 0;
       input.addEventListener('input', function(){
@@ -1021,8 +1050,14 @@ dialog#pickdlg::backdrop{background:rgba(3,8,14,.72)}
   function lastName(p){ return p.name.split(' ').slice(-1)[0]; }
   function firstName(p){ return p.name.split(' ')[0]; }
   function baseById(id){ return DATA.players.filter(function(q){ return q.id === id; })[0] || null; }
-  function currentPair(){ return [custom[0] || baseById('matthews') || DATA.players[0], custom[1] || baseById('mcdavid') || DATA.players[1]]; }
-  function isDefaultPair(){ return !custom[0] && !custom[1]; }
+  // A chosen player is looked up in the watchlist data first (fresh from data.json), then in what the live search loaded.
+  function ex(pl){
+    if (!pl) return null;
+    var f = (DATA.extras || []).filter(function(e){ return e.nhlId === pl.nhlId; })[0];
+    return f || (pl.games ? pl : null);
+  }
+  function currentPair(){ return [ex(custom[0]) || baseById('matthews') || DATA.players[0], ex(custom[1]) || baseById('mcdavid') || DATA.players[1]]; }
+  function isDefaultPair(){ return !ex(custom[0]) && !ex(custom[1]); }
   function fill(arr, L, T){ return arr.map(function(s){ return s.replace(/\{L\}/g, L).replace(/\{T\}/g, T); }); }
   var GEN_LEAD = [
     '{L} leads. {T} is currently drafting a strongly worded excuse.',
@@ -1416,7 +1451,7 @@ dialog#pickdlg::backdrop{background:rgba(3,8,14,.72)}
   function resetSeen(){ seen = null; lastState = null; }
   function refreshCustom(){
     custom.forEach(function(pl, i){
-      if (pl && window.Pick) window.Pick.loadPlayer(pl.nhlId).then(function(np){ custom[i] = np; render(); }, function(){});
+      if (pl && window.Pick && !ex(pl)) window.Pick.loadPlayer(pl.nhlId).then(function(np){ custom[i] = np; render(); }, function(){});
     });
   }
   if (HOSTED && window.Pick){
@@ -1424,11 +1459,12 @@ dialog#pickdlg::backdrop{background:rgba(3,8,14,.72)}
     $('#navlink').hidden = false;
     var SLOT_KEYS = ['s1', 's2'], sv = window.Pick.saved();
     SLOT_KEYS.forEach(function(k, i){
-      if (sv[k] && sv[k].id) window.Pick.loadPlayer(sv[k].id).then(function(pl){ custom[i] = pl; resetSeen(); render(); }, function(){});
+      if (sv[k] && sv[k].id){ custom[i] = { nhlId:sv[k].id, name:sv[k].name }; window.Pick.loadPlayer(sv[k].id).then(function(pl){ custom[i] = pl; resetSeen(); render(); }, function(){}); }
     });
     $('#pickbtn').addEventListener('click', function(){
       window.Pick.open({
         title:'Choose the two players',
+        extras:function(){ return DATA.extras || []; },
         slots:[{ key:'s1', label:'Player 1 (blue)', def:'Auston Matthews' }, { key:'s2', label:'Player 2 (orange)', def:'Connor McDavid' }],
         onChange:function(key, pl){ custom[SLOT_KEYS.indexOf(key)] = pl; resetSeen(); render(); }
       });
