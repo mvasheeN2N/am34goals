@@ -1,6 +1,6 @@
 {
  "season": "20262027",
- "updatedAt": "2026-10-21T00:07:20Z",
+ "updatedAt": "2026-10-21T00:47:11Z",
  "players": [
   {
    "id": "matthews",
@@ -126,13 +126,13 @@
     "st": "LIVE",
     "o": "CBJ",
     "h": false,
-    "per": 1,
+    "per": 2,
     "pt": "REG",
-    "clk": "00:00",
-    "intm": true,
-    "fs": 1,
+    "clk": "01:28",
+    "intm": false,
+    "fs": 5,
     "as": 1,
-    "g": 0,
+    "g": 1,
     "a": 1
    }
   },
@@ -213,7 +213,7 @@
     {
      "id": 2026020148,
      "s": "2026-10-21T01:00:00Z",
-     "st": "FUT",
+     "st": "PRE",
      "o": "MIN",
      "h": true
     },
