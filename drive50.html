@@ -463,6 +463,7 @@ body{overflow-x:hidden;overflow-x:clip}
   html.tv .stamp{display:block;position:static;flex:none;white-space:nowrap;margin:0;font-size:clamp(11px,1.5vh,18px);color:var(--muted)}
   html.tv .recap{border:0;background:transparent;padding:0;font-size:clamp(11px,1.6vh,19px);-webkit-mask-image:linear-gradient(90deg,transparent,#000 2%,#000 98%,transparent);mask-image:linear-gradient(90deg,transparent,#000 2%,#000 98%,transparent)}
   html.tv .rcopy{flex-wrap:nowrap;white-space:nowrap}
+  html.tv .chg{min-height:clamp(20px,3vh,32px);font-size:clamp(9px,1.4vh,14px);padding:0 .8vw}
   html.tv .nm{gap:.8vw;min-height:clamp(34px,5.6vh,72px)}
   html.tv .hl{gap:.4vw}
   html.tv .gm{min-height:clamp(18px,2.8vh,30px);margin-top:.6vh}
@@ -553,6 +554,10 @@ dialog#pickdlg{background:var(--surface);color:var(--ink);border:1px solid var(-
 dialog#pickdlg::backdrop{background:rgba(3,8,14,.72)}
 #pickdlg h2{margin:0 0 4px;font-family:var(--font-display);font-weight:700;font-size:28px;line-height:1.1}
 #pickdlg .pk-note{margin:0 0 14px;color:var(--muted);font-size:13px}
+.chg{font:inherit;font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);background:var(--surface);border:1px solid var(--mat);border-radius:999px;padding:0 12px;min-height:30px;cursor:pointer;white-space:nowrap;flex:none}
+.sub .chg{margin-left:8px;min-height:26px;vertical-align:middle}
+.chg:hover{background:var(--mat-soft)}
+.chg:focus-visible{outline:2px solid var(--mat);outline-offset:2px}
 .pk-slot{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:12px}
 .pk-slot h3{margin:0 0 4px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
 .pk-cur{margin:0 0 8px}

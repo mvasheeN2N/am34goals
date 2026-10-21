@@ -462,6 +462,7 @@ body{overflow-x:hidden;overflow-x:clip}
   html.tv .stamp{display:block;position:static;flex:none;white-space:nowrap;margin:0;font-size:clamp(11px,1.5vh,18px);color:var(--muted)}
   html.tv .recap{border:0;background:transparent;padding:0;font-size:clamp(11px,1.6vh,19px);-webkit-mask-image:linear-gradient(90deg,transparent,#000 2%,#000 98%,transparent);mask-image:linear-gradient(90deg,transparent,#000 2%,#000 98%,transparent)}
   html.tv .rcopy{flex-wrap:nowrap;white-space:nowrap}
+  html.tv .chg{min-height:clamp(20px,3vh,32px);font-size:clamp(9px,1.4vh,14px);padding:0 .8vw}
   html.tv .nm{gap:.8vw;min-height:clamp(34px,5.6vh,72px)}
   html.tv .hl{gap:.4vw}
   html.tv .gm{min-height:clamp(18px,2.8vh,30px);margin-top:.6vh}
@@ -495,6 +496,10 @@ dialog#pickdlg{background:var(--surface);color:var(--ink);border:1px solid var(-
 dialog#pickdlg::backdrop{background:rgba(3,8,14,.72)}
 #pickdlg h2{margin:0 0 4px;font-family:var(--font-display);font-weight:700;font-size:28px;line-height:1.1}
 #pickdlg .pk-note{margin:0 0 14px;color:var(--muted);font-size:13px}
+.chg{font:inherit;font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);background:var(--surface);border:1px solid var(--mat);border-radius:999px;padding:0 12px;min-height:30px;cursor:pointer;white-space:nowrap;flex:none}
+.sub .chg{margin-left:8px;min-height:26px;vertical-align:middle}
+.chg:hover{background:var(--mat-soft)}
+.chg:focus-visible{outline:2px solid var(--mat);outline-offset:2px}
 .pk-slot{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:12px}
 .pk-slot h3{margin:0 0 4px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
 .pk-cur{margin:0 0 8px}
@@ -520,7 +525,6 @@ dialog#pickdlg::backdrop{background:rgba(3,8,14,.72)}
     </div>
     <div class="ctrls">
     <a class="mon" id="navlink" href="drive50.html" hidden>Drive for 50</a>
-    <button type="button" class="mon" id="pickbtn" hidden>Change Players</button>
     <button type="button" class="mon" id="tvbtn" aria-pressed="false">Monitor view</button>
     </div>
   </header>
@@ -1360,7 +1364,7 @@ dialog#pickdlg::backdrop{background:rgba(3,8,14,.72)}
       return '<tr><td>' + fmtDate(x.d) + '</td><td>' + esc(x.o) + '</td><td>' + x.g + '</td><td>' + x.a + '</td><td>' + x.p + '</td><td>' + fmtTime(x.t) + '</td></tr>';
     }).join('');
     return '<article class="card ' + cls + (isLead ? (cls === 'mat' ? ' glow' : ' stench') : (cls === 'mcd' && curState === 'mat' ? ' trail' : '')) + '">' + (isLead ? aura() + (cls === 'mat' ? pennant(p) + CROWN : DECAY + HAT) : '') +
-      '<div class="card-head"><div class="who"><div class="nm"><h2>' + esc(p.name) + '</h2>' + highlightHtml(p, s) + '</div><p class="sub">' + esc(p.team) + ' &middot; #' + esc(p.num) + ' &middot; ' + esc(p.pos) + '</p>' + gameRowHtml(p) + '</div>' +
+      '<div class="card-head"><div class="who"><div class="nm"><h2>' + esc(p.name) + '</h2>' + highlightHtml(p, s) + '</div><p class="sub">' + esc(p.team) + ' &middot; #' + esc(p.num) + ' &middot; ' + esc(p.pos) + ' ' + (HOSTED && window.Pick ? '<button type="button" class="chg" data-slot="' + (cls === 'mat' ? 0 : 1) + '">Change Player</button>' : '') + '</p>' + gameRowHtml(p) + '</div>' +
       (isLead && cls === 'mcd' ? '<span class="chip">Leads. For now.</span>' : '') + '</div>' +
       '<dl class="stats">' + tiles + '</dl>' +
       '<div><p class="block-title">Season ' + metric + ', game by game</p>' + spark(cumulative(p, k), topY, maxN, cls) + '</div>' +
@@ -1455,17 +1459,20 @@ dialog#pickdlg::backdrop{background:rgba(3,8,14,.72)}
     });
   }
   if (HOSTED && window.Pick){
-    $('#pickbtn').hidden = false;
     $('#navlink').hidden = false;
     var SLOT_KEYS = ['s1', 's2'], sv = window.Pick.saved();
     SLOT_KEYS.forEach(function(k, i){
       if (sv[k] && sv[k].id){ custom[i] = { nhlId:sv[k].id, name:sv[k].name }; window.Pick.loadPlayer(sv[k].id).then(function(pl){ custom[i] = pl; resetSeen(); render(); }, function(){}); }
     });
-    $('#pickbtn').addEventListener('click', function(){
+    var SLOT_INFO = [{ key:'s1', label:'Player 1 (blue)', def:'Auston Matthews' }, { key:'s2', label:'Player 2 (orange)', def:'Connor McDavid' }];
+    $('#cards').addEventListener('click', function(ev){
+      var b = ev.target.closest && ev.target.closest('.chg');
+      if (!b) return;
+      var i = +b.getAttribute('data-slot');
       window.Pick.open({
-        title:'Choose the two players',
+        title:'Change player ' + (i + 1),
         extras:function(){ return DATA.extras || []; },
-        slots:[{ key:'s1', label:'Player 1 (blue)', def:'Auston Matthews' }, { key:'s2', label:'Player 2 (orange)', def:'Connor McDavid' }],
+        slots:[SLOT_INFO[i]],
         onChange:function(key, pl){ custom[SLOT_KEYS.indexOf(key)] = pl; resetSeen(); render(); }
       });
     });
