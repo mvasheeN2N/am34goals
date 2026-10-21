@@ -645,14 +645,19 @@ dialog#pickdlg::backdrop{background:rgba(3,8,14,.72)}
     out.sort(function(x, y){ return x.s < y.s ? -1 : (x.s > y.s ? 1 : 0); });
     return out.slice(0, 4);
   }
+  // Ask for the season by number: the NHL's "now" shortcut redirects, and browsers block that redirect.
+  function seasonOf(){
+    var d = new Date(), y = d.getFullYear();
+    if (d.getMonth() < 7) y -= 1;
+    return String(y) + String(y + 1);
+  }
   function loadPlayer(id){
-    return Promise.all([getJson(NHL + 'player/' + id + '/landing'), getJson(NHL + 'player/' + id + '/game-log/now')]).then(function(r){
-      var land = r[0], log = r[1];
+    return getJson(NHL + 'player/' + id + '/landing').then(function(land){
+      var season = seasonOf();
       var name = ((land.firstName || {}).default || '') + ' ' + ((land.lastName || {}).default || '');
       name = name.trim() || 'That player';
       if (land.position === 'G') throw new Error(name + ' is a goalie. Pick a skater.');
-      var again = (log.gameTypeId !== 2 && log.seasonId) ? getJson(NHL + 'player/' + id + '/game-log/' + log.seasonId + '/2') : Promise.resolve(log);
-      return again.then(function(lg){
+      return getJson(NHL + 'player/' + id + '/game-log/' + season + '/2').then(function(lg){
         var games = gamesFrom(lg);
         if (!games.length) throw new Error(name + ' has not played a regular-season game yet.');
         var abbr = land.currentTeamAbbrev || '';
@@ -662,7 +667,7 @@ dialog#pickdlg::backdrop{background:rgba(3,8,14,.72)}
           num:land.sweaterNumber || '', pos:land.position || '', games:games, sched:[]
         };
         if (!abbr) return pl;
-        return getJson(NHL + 'club-schedule-season/' + abbr + '/now').then(function(s){ pl.sched = schedFrom(s, abbr); return pl; }, function(){ return pl; });
+        return getJson(NHL + 'club-schedule-season/' + abbr + '/' + season).then(function(s){ pl.sched = schedFrom(s, abbr); return pl; }, function(){ return pl; });
       });
     });
   }
