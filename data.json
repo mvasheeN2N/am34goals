@@ -1,6 +1,6 @@
 {
  "season": "20262027",
- "updatedAt": "2026-10-22T23:52:24Z",
+ "updatedAt": "2026-10-23T00:21:22Z",
  "players": [
   {
    "id": "matthews",
@@ -134,12 +134,12 @@
     "st": "LIVE",
     "o": "NYR",
     "h": true,
-    "per": 1,
+    "per": 2,
     "pt": "REG",
-    "clk": "12:38",
-    "intm": true,
+    "clk": "12:45",
+    "intm": false,
     "fs": 2,
-    "as": 1,
+    "as": 3,
     "g": 0,
     "a": 0
    }
