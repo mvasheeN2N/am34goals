@@ -1,6 +1,6 @@
 {
  "season": "20262027",
- "updatedAt": "2026-10-23T00:21:22Z",
+ "updatedAt": "2026-10-23T01:13:56Z",
  "players": [
   {
    "id": "matthews",
@@ -134,11 +134,11 @@
     "st": "LIVE",
     "o": "NYR",
     "h": true,
-    "per": 2,
+    "per": 3,
     "pt": "REG",
-    "clk": "12:45",
+    "clk": "16:25",
     "intm": false,
-    "fs": 2,
+    "fs": 4,
     "as": 3,
     "g": 0,
     "a": 0
@@ -229,7 +229,7 @@
     {
      "id": 2026020163,
      "s": "2026-10-23T01:00:00Z",
-     "st": "FUT",
+     "st": "LIVE",
      "o": "CAR",
      "h": true
     },
@@ -254,7 +254,21 @@
      "o": "CGY",
      "h": true
     }
-   ]
+   ],
+   "live": {
+    "id": 2026020163,
+    "st": "LIVE",
+    "o": "CAR",
+    "h": true,
+    "per": 1,
+    "pt": "REG",
+    "clk": "18:24",
+    "intm": false,
+    "fs": 0,
+    "as": 0,
+    "g": 0,
+    "a": 0
+   }
   }
  ]
 }
