@@ -1,6 +1,6 @@
 {
  "season": "20262027",
- "updatedAt": "2026-10-23T01:13:56Z",
+ "updatedAt": "2026-10-23T01:52:14Z",
  "players": [
   {
    "id": "matthews",
@@ -103,7 +103,7 @@
     {
      "id": 2026020155,
      "s": "2026-10-22T23:00:00Z",
-     "st": "LIVE",
+     "st": "OVER",
      "o": "NYR",
      "h": true
     },
@@ -128,21 +128,7 @@
      "o": "SEA",
      "h": false
     }
-   ],
-   "live": {
-    "id": 2026020155,
-    "st": "LIVE",
-    "o": "NYR",
-    "h": true,
-    "per": 3,
-    "pt": "REG",
-    "clk": "16:25",
-    "intm": false,
-    "fs": 4,
-    "as": 3,
-    "g": 0,
-    "a": 0
-   }
+   ]
   },
   {
    "id": "mcdavid",
@@ -262,12 +248,12 @@
     "h": true,
     "per": 1,
     "pt": "REG",
-    "clk": "18:24",
-    "intm": false,
-    "fs": 0,
-    "as": 0,
+    "clk": "11:19",
+    "intm": true,
+    "fs": 1,
+    "as": 1,
     "g": 0,
-    "a": 0
+    "a": 1
    }
   }
  ]
