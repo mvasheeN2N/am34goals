@@ -1,6 +1,6 @@
 {
  "season": "20262027",
- "updatedAt": "2026-10-23T03:35:46Z",
+ "updatedAt": "2026-10-23T04:10:38Z",
  "players": [
   {
    "id": "matthews",
@@ -223,7 +223,7 @@
     {
      "id": 2026020163,
      "s": "2026-10-23T01:00:00Z",
-     "st": "CRIT",
+     "st": "FINAL",
      "o": "CAR",
      "h": true
     },
@@ -248,21 +248,7 @@
      "o": "CGY",
      "h": true
     }
-   ],
-   "live": {
-    "id": 2026020163,
-    "st": "CRIT",
-    "o": "CAR",
-    "h": true,
-    "per": 3,
-    "pt": "REG",
-    "clk": "01:36",
-    "intm": false,
-    "fs": 4,
-    "as": 5,
-    "g": 1,
-    "a": 3
-   }
+   ]
   }
  ]
 }
