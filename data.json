@@ -1,6 +1,6 @@
 {
  "season": "20262027",
- "updatedAt": "2026-10-23T01:52:14Z",
+ "updatedAt": "2026-10-23T02:20:37Z",
  "players": [
   {
    "id": "matthews",
@@ -103,7 +103,7 @@
     {
      "id": 2026020155,
      "s": "2026-10-22T23:00:00Z",
-     "st": "OVER",
+     "st": "OFF",
      "o": "NYR",
      "h": true
     },
@@ -246,14 +246,14 @@
     "st": "LIVE",
     "o": "CAR",
     "h": true,
-    "per": 1,
+    "per": 2,
     "pt": "REG",
-    "clk": "11:19",
-    "intm": true,
-    "fs": 1,
-    "as": 1,
+    "clk": "12:14",
+    "intm": false,
+    "fs": 2,
+    "as": 2,
     "g": 0,
-    "a": 1
+    "a": 2
    }
   }
  ]
