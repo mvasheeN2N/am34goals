@@ -1,6 +1,6 @@
 {
  "season": "20262027",
- "updatedAt": "2026-10-24T19:19:00Z",
+ "updatedAt": "2026-10-24T23:46:02Z",
  "players": [
   {
    "id": "matthews",
@@ -111,7 +111,7 @@
     {
      "id": 2026020176,
      "s": "2026-10-24T23:00:00Z",
-     "st": "FUT",
+     "st": "LIVE",
      "o": "EDM",
      "h": false
     },
@@ -136,7 +136,21 @@
      "o": "VAN",
      "h": false
     }
-   ]
+   ],
+   "live": {
+    "id": 2026020176,
+    "st": "LIVE",
+    "o": "EDM",
+    "h": false,
+    "per": 1,
+    "pt": "REG",
+    "clk": "02:28",
+    "intm": false,
+    "fs": 1,
+    "as": 0,
+    "g": 0,
+    "a": 0
+   }
   },
   {
    "id": "mcdavid",
@@ -231,7 +245,7 @@
     {
      "id": 2026020176,
      "s": "2026-10-24T23:00:00Z",
-     "st": "FUT",
+     "st": "LIVE",
      "o": "TOR",
      "h": true
     },
@@ -256,7 +270,21 @@
      "o": "NYI",
      "h": false
     }
-   ]
+   ],
+   "live": {
+    "id": 2026020176,
+    "st": "LIVE",
+    "o": "TOR",
+    "h": true,
+    "per": 1,
+    "pt": "REG",
+    "clk": "02:28",
+    "intm": false,
+    "fs": 0,
+    "as": 1,
+    "g": 0,
+    "a": 0
+   }
   }
  ]
 }
