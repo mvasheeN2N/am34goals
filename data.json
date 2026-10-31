@@ -1,6 +1,6 @@
 {
  "season": "20262027",
- "updatedAt": "2026-10-31T08:56:37Z",
+ "updatedAt": "2026-10-31T19:14:29Z",
  "players": [
   {
    "id": "matthews",
@@ -279,7 +279,7 @@
     {
      "id": 2026020220,
      "s": "2026-10-31T18:00:00Z",
-     "st": "FUT",
+     "st": "LIVE",
      "o": "NYI",
      "h": false
     },
@@ -304,7 +304,21 @@
      "o": "ANA",
      "h": true
     }
-   ]
+   ],
+   "live": {
+    "id": 2026020220,
+    "st": "LIVE",
+    "o": "NYI",
+    "h": false,
+    "per": 2,
+    "pt": "REG",
+    "clk": "12:44",
+    "intm": false,
+    "fs": 0,
+    "as": 0,
+    "g": 0,
+    "a": 0
+   }
   }
  ]
 }
