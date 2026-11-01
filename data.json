@@ -1,6 +1,6 @@
 {
  "season": "20262027",
- "updatedAt": "2026-10-31T22:32:05Z",
+ "updatedAt": "2026-11-01T01:26:10Z",
  "players": [
   {
    "id": "matthews",
@@ -135,7 +135,7 @@
     {
      "id": 2026020224,
      "s": "2026-10-31T23:00:00Z",
-     "st": "PRE",
+     "st": "LIVE",
      "o": "VAN",
      "h": false
     },
@@ -160,7 +160,21 @@
      "o": "NJD",
      "h": true
     }
-   ]
+   ],
+   "live": {
+    "id": 2026020224,
+    "st": "LIVE",
+    "o": "VAN",
+    "h": false,
+    "per": 3,
+    "pt": "REG",
+    "clk": "06:06",
+    "intm": false,
+    "fs": 3,
+    "as": 2,
+    "g": 1,
+    "a": 0
+   }
   },
   {
    "id": "mcdavid",
