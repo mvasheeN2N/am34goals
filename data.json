@@ -1,6 +1,6 @@
 {
  "season": "20262027",
- "updatedAt": "2026-11-27T10:57:47Z",
+ "updatedAt": "2026-11-27T19:49:41Z",
  "players": [
   {
    "id": "matthews",
@@ -223,7 +223,7 @@
     {
      "id": 2026020400,
      "s": "2026-11-27T18:00:00Z",
-     "st": "FUT",
+     "st": "LIVE",
      "o": "BOS",
      "h": false
     },
@@ -248,7 +248,21 @@
      "o": "FLA",
      "h": true
     }
-   ]
+   ],
+   "live": {
+    "id": 2026020400,
+    "st": "LIVE",
+    "o": "BOS",
+    "h": false,
+    "per": 2,
+    "pt": "REG",
+    "clk": "11:45",
+    "intm": true,
+    "fs": 2,
+    "as": 1,
+    "g": 0,
+    "a": 0
+   }
   },
   {
    "id": "mcdavid",
